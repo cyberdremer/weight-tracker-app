@@ -4,6 +4,7 @@ import {
   Field,
   Button,
   Input,
+  HStack,
   NativeSelect,
   For,
 } from "@chakra-ui/react";
@@ -16,6 +17,7 @@ const SignUpForm = () => {
     email: "",
     password: "",
     confirmpassword: "",
+    dob: ""
   });
 
   const handleChange = (e) => {
@@ -44,34 +46,52 @@ const SignUpForm = () => {
       </Stack>
 
       <Fieldset.Content>
-        <Field.Root>
-          <Field.Label>First Name:</Field.Label>
-          <Input name="firstname" />
+        <HStack>
+          <Field.Root required>
+            <Field.Label>First Name:
+              <Field.RequiredIndicator></Field.RequiredIndicator>
+            </Field.Label>
+            <Input name="firstname" />
+          </Field.Root>
+          <Field.Root required>
+            <Field.Label>Last Name:
+            <Field.RequiredIndicator></Field.RequiredIndicator>
+            </Field.Label>
+            <Input name="lastname" />
+          </Field.Root>
+        </HStack>
+
+        <Field.Root required>
+          <Field.Label>Date of Birth: 
+          <Field.RequiredIndicator></Field.RequiredIndicator>
+          </Field.Label>
+          <Input name="dob" type="date"></Input>
         </Field.Root>
 
-        <Field.Root>
-          <Field.Label>Last Name:</Field.Label>
-          <Input name="lastname" />
-        </Field.Root>
-
-        <Field.Root>
-          <Field.Label>Email address:</Field.Label>
+        <Field.Root required>
+          <Field.Label>Email address:
+          <Field.RequiredIndicator></Field.RequiredIndicator>
+          </Field.Label>
           <Input name="email" type="email" />
         </Field.Root>
 
-        <Field.Root>
-          <Field.Label>Password: </Field.Label>
+        <Field.Root required>
+          <Field.Label>Password: 
+          <Field.RequiredIndicator></Field.RequiredIndicator>
+          </Field.Label>
           <Input name="password" type="password" />
         </Field.Root>
 
-        <Field.Root>
-          <Field.Label>Confirm password: </Field.Label>
+        <Field.Root required>
+          <Field.Label>Confirm password: 
+          <Field.RequiredIndicator></Field.RequiredIndicator>
+          </Field.Label>
           <Input name="confirmpassword" type="password" />
         </Field.Root>
       </Fieldset.Content>
 
       <Button type="submit" alignSelf="flex-start" minWidth="100%">
-        Submit
+        Create account
       </Button>
     </Fieldset.Root>
   );
