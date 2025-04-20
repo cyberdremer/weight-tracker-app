@@ -31,17 +31,19 @@ const LogInForm = () => {
         </Stack>
 
         <Fieldset.Content>
-          <Field.Root>
-            <Field.Label>Email</Field.Label>
+          <Field.Root required>
+            <Field.Label>
+              Email: <Field.RequiredIndicator></Field.RequiredIndicator>
+            </Field.Label>
             <Input type="email" name="email" />
           </Field.Root>
-          <Field.Root>
-            <Field.Label>Password</Field.Label>
+          <Field.Root required>
+            <Field.Label>Password: <Field.RequiredIndicator></Field.RequiredIndicator></Field.Label>
             <Input type="password" name="password" />
           </Field.Root>
         </Fieldset.Content>
         <Button type="submit" minWidth="100%">
-          Submit
+          Log in
         </Button>
       </Fieldset.Root>
     </>
