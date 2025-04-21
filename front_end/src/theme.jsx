@@ -10,7 +10,9 @@ const interTheme = {
       },
       colors: {
         dark: {},
-        light: {},
+        light: {
+          background: {value: "#ffbb3d"}
+        },
       },
     },
   },
