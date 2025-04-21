@@ -14,6 +14,7 @@ import { FaBars, FaHome, FaUser, FaHamburger } from "react-icons/fa";
 import DrawerComponent from "./drawer";
 import { useState } from "react";
 import { LuLogOut } from "react-icons/lu";
+import dashboardRoutes from "@/pageroutes/dashboardroutes";
 
 const DashboardHeader = () => {
   const [drawerVisibility, setDrawerVisbility] = useState(false);
@@ -40,29 +41,7 @@ const DashboardHeader = () => {
           >
             <List.Root variant="plain" align="center" gap="5">
               <For
-                each={[
-                  {
-                    icon: <FaHome></FaHome>,
-                    title: "Dashboard",
-                    path: "/dashboard",
-                  },
-                  {
-                    icon: <FaHamburger></FaHamburger>,
-                    title: "AI Dietician",
-                    path: "/aidietician",
-                  },
-                  {
-                    icon: <FaUser></FaUser>,
-                    title: "Account Details",
-                    path: "/accountdetails",
-                  },
-
-                  {
-                    icon: <LuLogOut></LuLogOut>,
-                    title: "Log Out",
-                    path: "/logout",
-                  },
-                ]}
+                each={dashboardRoutes}
               >
                 {(item, index) => (
                   <List.Item key={index}>
