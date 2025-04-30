@@ -1,0 +1,25 @@
+const passport = require("passport");
+const localStrategy = require("../strategy/local");
+const prisma = require("../config/prismaclient");
+
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = prisma.user.findUniqueOrThrow({
+      where: {
+        id: id,
+      },
+    });
+    done(null, user)
+  } catch (error) {
+    done(err);
+  }
+});
+
+passport.use(localStrategy);
+
+module.exports = passport;
