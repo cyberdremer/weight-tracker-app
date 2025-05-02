@@ -5,6 +5,7 @@ import Dashboard from "@/devcreatedcomponents/pages/dashboard";
 import LogOut from "@/devcreatedcomponents/pages/logout";
 import WeightSubmission from "@/devcreatedcomponents/pages/weightsubmission";
 import AccountDetailsPage from "@/devcreatedcomponents/pages/accountdetails";
+import AiDietician from "@/devcreatedcomponents/pages/aidietician";
 const pageData = [
   {
     path: "",
@@ -30,6 +31,11 @@ const pageData = [
     title: "Account Details",
     element: <AccountDetailsPage></AccountDetailsPage>,
     path: "/accountdetails",
+  },
+  {
+    title: "Ai Dietician",
+    element: <AiDietician></AiDietician>,
+    path: "/aidietician",
   },
 
   {
