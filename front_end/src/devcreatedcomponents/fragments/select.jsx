@@ -8,15 +8,15 @@ import {
 } from "@chakra-ui/react";
 
 
-const SelectFragment = ({ selectItems }) => {
+const SelectFragment = ({ selectItems, placeholder, label, handleClick,name }) => {
   return (
     <>
-      <Select.Root collection={selectItems}>
+      <Select.Root collection={selectItems} name={name}>
         <Select.HiddenSelect></Select.HiddenSelect>
-        <Select.Label>Enter desired units</Select.Label>
+        <Select.Label>{label}</Select.Label>
         <Select.Control>
           <Select.Trigger>
-            <Select.ValueText placeholder="Select unit of measurements"></Select.ValueText>
+            <Select.ValueText placeholder={placeholder}></Select.ValueText>
           </Select.Trigger>
           <Select.IndicatorGroup>
             <Select.Indicator></Select.Indicator>
@@ -26,7 +26,7 @@ const SelectFragment = ({ selectItems }) => {
           <Select.Positioner>
             <Select.Content>
               {selectItems.items.map((items, index) => (
-                <Select.Item item={items} key={index} name={items}>
+                <Select.Item item={items} key={index} name={items} onClick={handleClick} >
                   {items}
                   <Select.ItemIndicator></Select.ItemIndicator>
                 </Select.Item>
