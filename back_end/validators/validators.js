@@ -58,6 +58,15 @@ const signupValidation = [
     })
     .withMessage("Passwords must match!"),
 
+  body("units")
+    .trim()
+    .notEmpty()
+    .withMessage(`Desired Units: ${emptyError}`)
+    .custom((value) => {
+      return value === "kgs" || value === "lbs";
+    })
+    .withMessage(`Desired units: Invalid Selection, please select again!`),
+
   body("signupcode")
     .trim()
     .notEmpty()
@@ -80,4 +89,59 @@ const loginValidation = [
   body("password").trim().notEmpty().withMessage(`Password: ${emptyError}`),
 ];
 
-module.exports = { signupValidation, loginValidation };
+// TODO Add validation for updating your weight and posting a weight for a day
+
+const createWeightEntryValidation = [
+  body("weight")
+    .trim()
+    .notEmpty()
+    .withMessage(`Weight: ${emptyError}`)
+    .isFloat()
+    .withMessage(`Weight: provided value must be a number!`),
+
+  body("date")
+    .trim()
+    .notEmpty()
+    .withMessage(`Date: ${emptyError}`)
+    .isDate()
+    .withMessage(`Date: value provided must be a date!`),
+
+  body("notes").optional(),
+];
+
+const updateAccountValidation = [
+  body("dob")
+    .trim()
+    .isEmpty()
+    .withMessage(`Fullname: ${emptyError}`)
+    .isDate()
+    .withMessage(`Date Of Birth: must be a valid date of birth!`),
+
+  body("units")
+    .trim()
+    .isEmpty()
+    .withMessage(`Units: ${emptyError}`)
+    .custom((value) => {
+      return value === "kgs" || value === "lbs";
+    }),
+];
+
+const dietValidation = [
+  body("goal").trim().isEmpty().withMessage(`Goal: ${emptyError}`),
+
+  body("diet").trim().isEmpty().withMessage(`Diet: ${emptyError}`),
+];
+
+const dateFilterValidation = [
+  body("startdate").trim().isEmpty().withMessage(`Start Date: ${emptyError}`),
+
+  body("enddate").trim().isEmpty().withMessage(`End Date: ${emptyError}`),
+];
+module.exports = {
+  signupValidation,
+  loginValidation,
+  createWeightEntryValidation,
+  updateAccountValidation,
+  dietValidation,
+  dateFilterValidation,
+};
