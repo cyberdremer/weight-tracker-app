@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { Field, Input, InputGroup, Textarea, Fieldset, Stack } from "@chakra-ui/react";
+import {
+  Field,
+  Input,
+  InputGroup,
+  Textarea,
+  Fieldset,
+  Stack,
+  Button,
+} from "@chakra-ui/react";
 
 const WeightForm = ({ isImperial }) => {
   const [form, setForm] = useState({
@@ -21,7 +29,6 @@ const WeightForm = ({ isImperial }) => {
       animationName="fade-in"
       animationDuration="slowest"
       marginTop="3rem"
-  
       borderRadius="md"
     >
       <Stack>
@@ -30,15 +37,15 @@ const WeightForm = ({ isImperial }) => {
       <Fieldset.Content>
         <Field.Root>
           <Field.Label>Weight: </Field.Label>
-
-          <Input type="number" name="weight"></Input>
+          <InputGroup endElement={isImperial ? "lbs" : "kgs"}>
+            <Input type="number" name="weight"></Input>
+          </InputGroup>
         </Field.Root>
 
         <Field.Root>
           <Field.Label>Date: </Field.Label>
-          <InputGroup endElement={isImperial ? "lbs" : "kgs"}>
-            <Input type="date" name="date"></Input>
-          </InputGroup>
+
+          <Input type="date" name="date"></Input>
         </Field.Root>
         <Field.Root>
           <Field.Label>Notes (Optional)</Field.Label>
@@ -50,9 +57,11 @@ const WeightForm = ({ isImperial }) => {
           <Field.HelperText>Max 100 characters</Field.HelperText>
         </Field.Root>
       </Fieldset.Content>
+      <Button type="submit" alignSelf="flex-start" minWidth="100%">
+        Submit Weight Entry
+      </Button>
     </Fieldset.Root>
   );
 };
-
 
 export default WeightForm;
