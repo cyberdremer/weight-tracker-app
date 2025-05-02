@@ -1,4 +1,6 @@
-import DashboardHeader from "../fragments/dashboardheader";
+import { use, useState } from "react";
+import DashboardHeader from "../fragments/dashboard/dashboardheader";
+import { DeleteAccountAlert } from "../alerts/alert";
 import AccountInformation from "../fragments/forms/accountinformation";
 import { Flex } from "@chakra-ui/react";
 const AccountDetailsPage = ({}) => {
@@ -10,5 +12,4 @@ const AccountDetailsPage = ({}) => {
   );
 };
 
-
-export default AccountDetailsPage
+export default AccountDetailsPage;
