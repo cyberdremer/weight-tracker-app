@@ -1,4 +1,4 @@
-import DashboardHeader from "../fragments/dashboardheader";
+import DashboardHeader from "../fragments/dashboard/dashboardheader";
 import WeightForm from "../fragments/forms/weight";
 import { Flex } from "@chakra-ui/react";
 const WeightSubmission = () => {
