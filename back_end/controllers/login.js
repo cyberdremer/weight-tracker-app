@@ -13,16 +13,14 @@ const loginController = [
       throw new ErrorWithStatusCode(errors.array()[0].msg, 400);
     }
 
-    passport.authenticate("local", async (err, user, info) => {
-      if (err) next(new ErrorWithStatusCode(err, 500));
-      if (!user) return next(new ErrorWithStatusCode("User not found!", 400));
-      res.status(200).json({
-        data: {
-          message: `${user.email}: signing in!`,
-          authenicated: true
-        },
-      });
-    })(req, res, next);
+    passport.authenticate("local", { session: true })(req, res, next);
+
+    // res.status(200).json({
+    //   data: {
+    //     message: `${req.body.email} has logged in!`,
+    //     status: 200,
+    //   },
+    // });
   }),
 ];
 
