@@ -1,5 +1,5 @@
 const prisma = require("../config/prismaclient");
-const{ signupValidation} = require("../validators/validators")
+const { signupValidation } = require("../validators/validators");
 const { validationResult } = require("express-validator");
 const passwordHasher = require("../utils/passwordhasher");
 const asyncHandler = require("express-async-handler");
@@ -18,6 +18,7 @@ const createAccount = [
         email: req.body.email,
         fullname: `${req.body.firstname + " " + req.body.lastname}`,
         passwordhash: hashedpassword,
+        isImperial: req.body.units === "lbs" ? true : false,
       },
     });
 
