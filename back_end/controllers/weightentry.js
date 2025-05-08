@@ -3,6 +3,7 @@ const { validationResult } = require("express-validator");
 const { createWeightEntryValidation } = require("../validators/validators");
 const prisma = require("../config/prismaclient");
 const passport = require("../config/passportconfig");
+
 const ErrorWithStatusCode = require("../errors/statuscode");
 const ensureAuthenticated = require("../middleware/authenticated");
 
@@ -94,4 +95,4 @@ const deleteWeightEntry = [
   }),
 ];
 
-module.exports = postWeightEntry;
+module.exports = {postWeightEntry, deleteWeightEntry};
