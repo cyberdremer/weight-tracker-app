@@ -20,6 +20,7 @@ model User {
   email         String          @unique
   passwordhash  String
   WeightEntries WeightEntries[]
+  DietEntries   DietEntries[]
   isImperial    Boolean         @default(true)
 }
 
@@ -27,14 +28,23 @@ model WeightEntries {
   id        Int      @id @default(autoincrement())
   owner     User     @relation(fields: [ownerid], references: [id])
   ownerid   Int
-  createdat DateTime @default(now())
+  createdat DateTime @default(now()) @db.Date
   weight    Decimal
   notes     String
+}
+
+model DietEntries {
+  id      Int    @id @default(autoincrement())
+  owner   User   @relation(fields: [ownerid], references: [id])
+  ownerid Int
+  diet    String
+  name String 
+  createdat DateTime @default(now()) @db.Date
 }
 
 model Session {
   id        String   @id
   sid       String   @unique
   data      String
-  expiresat DateTime
+  expiresAt DateTime
 }

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "DietEntries" ADD COLUMN     "createdat" DATE NOT NULL DEFAULT CURRENT_TIMESTAMP;
