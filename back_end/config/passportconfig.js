@@ -2,7 +2,7 @@ const passport = require("passport");
 const localStrategy = require("../strategy/local");
 const prisma = require("../config/prismaclient");
 
-
+passport.use(localStrategy);
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
@@ -14,12 +14,10 @@ passport.deserializeUser(async (id, done) => {
         id: id,
       },
     });
-    done(null, user)
+    done(null, user);
   } catch (error) {
     done(err);
   }
 });
-
-passport.use(localStrategy);
 
 module.exports = passport;
