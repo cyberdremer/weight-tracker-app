@@ -6,7 +6,8 @@ require("dotenv").config();
 const sessionConfig = expressionSession({
   cookie: {
     maxAge: 7 * 24 * 60 * 60 * 1000,
-    // path: "/",
+    path: "/",
+    secure: false
     // sameSite:"none",
     // httpOnly: true,
     // secure: false,
