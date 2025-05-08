@@ -3,8 +3,10 @@ const { validationResult } = require("express-validator");
 const { updateAccountValidation } = require("../validators/validators");
 const prisma = require("../config/prismaclient");
 const ErrorWithStatusCode = require("../errors/statuscode");
+const ensureAuthenticated = require("../middleware/authenticated");
 
 const deleteAccount = [
+  ensureAuthenticated,
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -12,9 +14,13 @@ const deleteAccount = [
     }
     const deletedAccount = await prisma.user.delete({
       where: {
-        id: req.user.id,
+        id: req.session.passport.user,
       },
     });
+
+    if (!deletedAccount) {
+      throw new ErrorWithStatusCode("Account not found!", 404);
+    }
 
     res.status(200).json({
       data: {
@@ -26,6 +32,7 @@ const deleteAccount = [
 ];
 
 const updateAccount = [
+  ensureAuthenticated,
   updateAccountValidation,
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
@@ -34,7 +41,7 @@ const updateAccount = [
     }
     await prisma.user.update({
       where: {
-        id: req.user.id,
+        id: req.session.passport.user,
       },
       data: {
         dob: req.body.dob,
