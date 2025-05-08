@@ -97,14 +97,20 @@ const createWeightEntryValidation = [
     .notEmpty()
     .withMessage(`Weight: ${emptyError}`)
     .isFloat()
-    .withMessage(`Weight: provided value must be a number!`),
+    .withMessage(`Weight: provided value must be a number!`)
+    .custom((value) => {
+      return value > 0
+    }).
+    withMessage(`Weight: weight cannot be zero!`),
 
+
+
+
+    
   body("date")
     .trim()
     .notEmpty()
-    .withMessage(`Date: ${emptyError}`)
-    .isDate()
-    .withMessage(`Date: value provided must be a date!`),
+    .withMessage(`Date: ${emptyError}`),
 
   body("notes").optional(),
 ];
@@ -112,14 +118,14 @@ const createWeightEntryValidation = [
 const updateAccountValidation = [
   body("dob")
     .trim()
-    .isEmpty()
+    .notEmpty()
     .withMessage(`Fullname: ${emptyError}`)
     .isDate()
     .withMessage(`Date Of Birth: must be a valid date of birth!`),
 
   body("units")
     .trim()
-    .isEmpty()
+    .notEmpty()
     .withMessage(`Units: ${emptyError}`)
     .custom((value) => {
       return value === "kgs" || value === "lbs";
@@ -127,15 +133,15 @@ const updateAccountValidation = [
 ];
 
 const dietValidation = [
-  body("goal").trim().isEmpty().withMessage(`Goal: ${emptyError}`),
+  body("goal").trim().notEmpty().withMessage(`Goal: ${emptyError}`),
 
-  body("diet").trim().isEmpty().withMessage(`Diet: ${emptyError}`),
+  body("diet").trim().notEmpty().withMessage(`Diet: ${emptyError}`),
 ];
 
 const dateFilterValidation = [
-  body("startdate").trim().isEmpty().withMessage(`Start Date: ${emptyError}`),
+  body("startdate").trim().notEmpty().withMessage(`Start Date: ${emptyError}`),
 
-  body("enddate").trim().isEmpty().withMessage(`End Date: ${emptyError}`),
+  body("enddate").trim().notEmpty().withMessage(`End Date: ${emptyError}`),
 ];
 module.exports = {
   signupValidation,
