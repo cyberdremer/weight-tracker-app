@@ -7,7 +7,7 @@ const errorHandler = require("./middleware/errorhandler");
 const toplevelRouter = require("./routes/toplevel");
 const app = express();
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cors());
 app.use(expressionSession);
 app.use(passport.session());
 app.use(toplevelRouter);
