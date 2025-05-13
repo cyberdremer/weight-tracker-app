@@ -75,6 +75,27 @@ const signupValidation = [
       return value === process.env.SIGN_UP_CODE;
     })
     .withMessage(`This is not the correct sign up code! Please try again!`),
+
+  body("height")
+    .notEmpty()
+    .withMessage(`Height: ${emptyError}`)
+    .isNumeric()
+    .withMessage(`Height: must be a number!`)
+    .custom((value) => {
+      return value > 0;
+    })
+    .withMessage(`Height: must be a positive, non-zero number`),
+
+  body("dob").custom((value) => {
+    const today = new Date();
+    const userDob = new Date(value);
+
+    const diff = today.getTime() - userDob.getTime();
+
+    const years = diff / (1000 * 60 * 60 * 24 * 7 * 52);
+    return years >= 18;
+  })
+  .withMessage(`Date of Birth: User must be 18!`)
 ];
 
 const loginValidation = [
@@ -99,18 +120,11 @@ const createWeightEntryValidation = [
     .isFloat()
     .withMessage(`Weight: provided value must be a number!`)
     .custom((value) => {
-      return value > 0
-    }).
-    withMessage(`Weight: weight cannot be zero!`),
+      return value > 0;
+    })
+    .withMessage(`Weight: weight cannot be zero!`),
 
-
-
-
-    
-  body("date")
-    .trim()
-    .notEmpty()
-    .withMessage(`Date: ${emptyError}`),
+  body("date").trim().notEmpty().withMessage(`Date: ${emptyError}`),
 
   body("notes").optional(),
 ];
