@@ -17,10 +17,12 @@ model User {
   id            Int             @id @default(autoincrement())
   createdat     DateTime        @default(now())
   fullname      String
+  dateofbirth   DateTime        @db.Date
   email         String          @unique
   passwordhash  String
   WeightEntries WeightEntries[]
   DietEntries   DietEntries[]
+  height        Decimal
   isImperial    Boolean         @default(true)
 }
 
@@ -34,11 +36,11 @@ model WeightEntries {
 }
 
 model DietEntries {
-  id      Int    @id @default(autoincrement())
-  owner   User   @relation(fields: [ownerid], references: [id])
-  ownerid Int
-  diet    String
-  name String 
+  id        Int      @id @default(autoincrement())
+  owner     User     @relation(fields: [ownerid], references: [id])
+  ownerid   Int
+  diet      String
+  name      String
   createdat DateTime @default(now()) @db.Date
 }
 
