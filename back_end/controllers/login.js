@@ -25,10 +25,17 @@ const loginController = [
         if (err) {
           return next(err);
         }
+
         res.status(200).json({
           data: {
             message: "Login Succesfull!",
             status: 200,
+            user: {
+              fullname: user.fullname,
+              email: user.email,
+              isImperial: user.isImperial,
+              height: user.height,
+            },
           },
         });
       });
