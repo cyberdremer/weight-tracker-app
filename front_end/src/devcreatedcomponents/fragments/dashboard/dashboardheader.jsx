@@ -1,6 +1,5 @@
 import {
   Group,
-  Link,
   Heading,
   HStack,
   IconButton,
@@ -13,12 +12,16 @@ import {
 } from "@chakra-ui/react";
 import { FaBars, FaHome, FaUser, FaHamburger } from "react-icons/fa";
 import DrawerComponent from "../drawer";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { LuLogOut } from "react-icons/lu";
 import dashboardRoutes from "@/pageroutes/dashboardroutes";
-
+import { Switch } from "@chakra-ui/react";
+import { ColorModeButton } from "@/components/ui/color-mode";
+import { InfoContext } from "@/devcreatedcomponents/context/InfoContext";
+import { Link } from "react-router";
 const DashboardHeader = () => {
   const [drawerVisibility, setDrawerVisbility] = useState(false);
+  const {user} = useContext(InfoContext)
 
   const handleDrawerVisibility = (e) => {
     setDrawerVisbility(!drawerVisibility);
@@ -46,7 +49,7 @@ const DashboardHeader = () => {
               >
                 {(item, index) => (
                   <List.Item key={index}>
-                    <Link href={item.path} width="60%">
+                    <Link to={item.path}>
                       <List.Indicator asChild>{item.icon}</List.Indicator>
                       {item.title}
                     </Link>
@@ -63,8 +66,10 @@ const DashboardHeader = () => {
 
         <Group>
           <Avatar.Root>
-            <Avatar.Fallback name="AI Artist"></Avatar.Fallback>
+            <Avatar.Fallback name={user.fullname || "AI Artist"}></Avatar.Fallback>
           </Avatar.Root>
+          <ColorModeButton></ColorModeButton>
+
         </Group>
       </HStack>
       <Separator></Separator>
