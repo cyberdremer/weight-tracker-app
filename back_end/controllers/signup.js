@@ -8,9 +8,13 @@ const createAccount = [
   signupValidation,
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
       throw new ErrorWithStatusCode(errors.array()[0].msg, 400);
     }
+
+    const height =
+      req.body.units === "lbs" ? req.body.height * 2.5 : req.body.height;
 
     const hashedpassword = await passwordHasher(req.body.password);
     const user = await prisma.user.create({
@@ -19,6 +23,8 @@ const createAccount = [
         fullname: `${req.body.firstname + " " + req.body.lastname}`,
         passwordhash: hashedpassword,
         isImperial: req.body.units === "lbs" ? true : false,
+        height: height,
+        dateofbirth: req.body.dob
       },
     });
 
