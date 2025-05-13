@@ -6,6 +6,7 @@ const AuthProvider = ({ children }) => {
     const storedAuth = localStorage.getItem("authed");
     return storedAuth === "true";
   });
+  // TODO rewrite login and logout to make calls to the server. authenticate and logout routes respectively
 
   const logOut = () => {
     setAuthed(false);
