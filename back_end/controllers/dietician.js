@@ -6,6 +6,7 @@ const prisma = require("../config/prismaclient");
 const openai = require("../config/openaiconfig");
 const ErrorWithStatusCode = require("../errors/statuscode");
 const userDietPrompt = require("../prompts/prompt");
+const { v4: uuidv4 } = require("uuid");
 
 const postAiDietician = [
   ensureAuthenticated,
@@ -51,8 +52,40 @@ const postAiDietician = [
 
     res.status(203).json({
       data: {
-        message: response.output_text,
+        message: "Diet has been generated sucessfully!",
         status: 203,
+        diet: response.output_text.plan,
+      },
+    });
+  }),
+];
+
+const postSaveDiet = [
+  ensureAuthenticated,
+  asyncHandler(async (req, res, next) => {
+    if (!req.body) {
+      throw new ErrorWithStatusCode("You must provide a diet to save!", 400);
+    }
+    const dietJSON = JSON.stringify(req.body);
+    const finalJson = JSON.stringify({
+      plan: dietJSON,
+    });
+    const userId = req.session.passport.user;
+    const dateTime = new Date();
+    const entryId = uuidv4();
+
+    await prisma.dietEntries.create({
+      data: {
+        ownerid: userId,
+        diet: finalJson,
+        name: `${"diet" + dateTime.toDateString() + entryId}`,
+      },
+    });
+
+    res.status(201).json({
+      data: {
+        message: "Diet has been saved succesfully",
+        status: 201,
       },
     });
   }),
@@ -61,7 +94,7 @@ const postAiDietician = [
 const deleteEntry = [
   ensureAuthenticated,
   asyncHandler(async (req, res, next) => {
-    const { dietId } = req.params;
+    const dietId = Number(req.params.dietId);
     const userId = req.session.passport.user;
     const entry = await prisma.dietEntries.delete({
       where: {
@@ -85,7 +118,13 @@ const deleteEntry = [
 const downloadEntry = [
   ensureAuthenticated,
   asyncHandler(async (req, res, next) => {
-    const { dietId } = req.params;
+    if (!req.params.dietId) {
+      throw new ErrorWithStatusCode(
+        "You must provide a dietId to download!",
+        400
+      );
+    }
+    const dietId = Number(req.params.dietId);
     const userId = req.session.passport.user;
     const entry = await prisma.dietEntries.findFirst({
       where: {
@@ -118,6 +157,10 @@ const getAllDietEntries = [
       where: {
         ownerid: userId,
       },
+      select: {
+        id: true,
+        name: true,
+      },
     });
 
     res.status(200).json({
@@ -130,4 +173,10 @@ const getAllDietEntries = [
   }),
 ];
 
-module.exports = { postAiDietician, deleteEntry, downloadEntry, getAllDietEntries };
+module.exports = {
+  postAiDietician,
+  deleteEntry,
+  downloadEntry,
+  getAllDietEntries,
+  postSaveDiet,
+};
