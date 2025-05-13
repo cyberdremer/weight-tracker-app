@@ -30,7 +30,8 @@ const getWeightDataForMonth = [
 
     res.status(302).json({
       data: {
-        dates: dateData,
+        entries: dateData,
+        message: "Data successfully retrieved",
         status: 302,
       },
     });
@@ -68,6 +69,7 @@ const getWeightDataForSpecifiedTimeFrame = [
           lte: endDate,
         },
       },
+
     });
 
     if (weightData.length === 0) {
@@ -80,7 +82,8 @@ const getWeightDataForSpecifiedTimeFrame = [
     } else {
       res.status(302).json({
         data: {
-          dates: weightData,
+          entries: weightData,
+          message: "Data sucesfully retrieved",
           status: 302,
         },
       });
