@@ -9,16 +9,8 @@ import {
   Button,
 } from "@chakra-ui/react";
 
-const WeightForm = ({ isImperial }) => {
-  const [form, setForm] = useState({
-    weight: "",
-    date: "",
-    notes: "",
-  });
+const WeightForm = ({ isImperial, handleEntrySubmission, handleChange, form }) => {
 
-  const handleTextChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
 
   return (
     <Fieldset.Root
@@ -38,14 +30,14 @@ const WeightForm = ({ isImperial }) => {
         <Field.Root>
           <Field.Label>Weight: </Field.Label>
           <InputGroup endElement={isImperial ? "lbs" : "kgs"}>
-            <Input type="number" name="weight"></Input>
+            <Input type="number" name="weight" value={form.weight} onChange={handleChange}></Input>
           </InputGroup>
         </Field.Root>
 
         <Field.Root>
           <Field.Label>Date: </Field.Label>
 
-          <Input type="date" name="date"></Input>
+          <Input type="date" name="date" value={form.date} onChange={handleChange}></Input>
         </Field.Root>
         <Field.Root>
           <Field.Label>Notes (Optional)</Field.Label>
@@ -53,11 +45,13 @@ const WeightForm = ({ isImperial }) => {
             placeholder="Add any notes about your day!"
             maxLength="100"
             name="notes"
+            value={form.notes}
+            onChange={handleChange}
           ></Textarea>
           <Field.HelperText>Max 100 characters</Field.HelperText>
         </Field.Root>
       </Fieldset.Content>
-      <Button type="submit" alignSelf="flex-start" minWidth="100%">
+      <Button type="submit" alignSelf="flex-start" minWidth="100%" onClick={handleEntrySubmission}>
         Submit Weight Entry
       </Button>
     </Fieldset.Root>

@@ -5,11 +5,13 @@ import {
   Fieldset,
   Button,
   createListCollection,
+  Avatar
 } from "@chakra-ui/react";
 import SelectFragment from "../select";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { DeleteAccountAlert } from "@/devcreatedcomponents/alerts/alert";
 import { red } from "@mui/material/colors";
+import { InfoContext } from "@/devcreatedcomponents/context/InfoContext";
 
 const units = createListCollection({
   items: ["kgs", "lbs"],
@@ -17,7 +19,7 @@ const units = createListCollection({
 
 const AccountInformation = ({ name, email, dob }) => {
   // TODO Handle all the updating in this component, only handle visibility of errors  in hte parent component.
-
+  const {user} = useContext(InfoContext);
   const [deleteVisbility, setDeleteVisibility] = useState(false);
   const setVisibility = () => {
     setDeleteVisibility(!deleteVisbility);
@@ -48,6 +50,9 @@ const AccountInformation = ({ name, email, dob }) => {
         marginTop="3rem"
       >
         <Stack>
+          <Avatar.Root alignSelf="center" size="2xl">
+            <Avatar.Fallback name={user.fullname || "Ai Artist"}></Avatar.Fallback>
+          </Avatar.Root>
           <Fieldset.Legend>Account Details</Fieldset.Legend>
         </Stack>
 
@@ -57,7 +62,7 @@ const AccountInformation = ({ name, email, dob }) => {
               Full Name:
               <Field.RequiredIndicator></Field.RequiredIndicator>
             </Field.Label>
-            <Input name="fullname" value={name} onChange={handleChange} />
+            <Input name="fullname" value={user.fullname} disabled />
           </Field.Root>
 
           <Field.Root>
@@ -65,7 +70,7 @@ const AccountInformation = ({ name, email, dob }) => {
               Email address:
               <Field.RequiredIndicator></Field.RequiredIndicator>
             </Field.Label>
-            <Input name="email" type="email" value={email} disabled />
+            <Input name="email" type="email" value={user.email} disabled />
           </Field.Root>
           <Field.Root>
             <Field.Label>Date of Birth:</Field.Label>
