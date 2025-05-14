@@ -7,11 +7,22 @@ import {
   createListCollection,
 } from "@chakra-ui/react";
 
-
-const SelectFragment = ({ selectItems, placeholder, label, handleClick,name }) => {
+const SelectFragment = ({
+  selectItems,
+  placeholder,
+  label,
+  handleClick,
+  name,
+  value,
+}) => {
   return (
     <>
-      <Select.Root collection={selectItems} name={name}>
+      <Select.Root
+        collection={selectItems}
+        name={name}
+        value={value}
+        onValueChange={handleClick}
+      >
         <Select.HiddenSelect></Select.HiddenSelect>
         <Select.Label>{label}</Select.Label>
         <Select.Control>
@@ -26,7 +37,7 @@ const SelectFragment = ({ selectItems, placeholder, label, handleClick,name }) =
           <Select.Positioner>
             <Select.Content>
               {selectItems.items.map((items, index) => (
-                <Select.Item item={items} key={index} name={items} onClick={handleClick} >
+                <Select.Item item={items} key={index} name={name}>
                   {items}
                   <Select.ItemIndicator></Select.ItemIndicator>
                 </Select.Item>
