@@ -1,25 +1,37 @@
-import { FaBars, FaHome, FaUser, FaHamburger, FaWeight } from "react-icons/fa";
+import {
+  FaBars,
+  FaHome,
+  FaUser,
+  FaHamburger,
+  FaWeight,
+  FaDownload,
+} from "react-icons/fa";
 import { LuLogOut } from "react-icons/lu";
 const dashboardRoutes = [
   {
     icon: <FaHome></FaHome>,
     title: "Dashboard",
-    path: "/dashboard",
+    path: "/login/dashboard",
   },
   {
     icon: <FaHamburger></FaHamburger>,
     title: "AI Dietician",
-    path: "/aidietician",
+    path: "/login/dashboard/aidietician",
+  },
+  {
+    icon: <FaDownload></FaDownload>,
+    title: "Download Diets",
+    path: "/login/dashboard/downloaddiets",
   },
   {
     icon: <FaWeight></FaWeight>,
     title: "Weight Entry",
-    path: "/weightentry",
+    path: "/login/dashboard/weightentry",
   },
   {
     icon: <FaUser></FaUser>,
     title: "Account Details",
-    path: "/accountdetails",
+    path: "/login/dashboard/accountdetails",
   },
 
   {
