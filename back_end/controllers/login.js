@@ -35,6 +35,7 @@ const loginController = [
               email: user.email,
               isImperial: user.isImperial,
               height: user.height,
+              dateofbirth: user.dateofbirth
             },
           },
         });
