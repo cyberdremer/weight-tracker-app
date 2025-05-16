@@ -7,6 +7,11 @@ const openai = require("../config/openaiconfig");
 const ErrorWithStatusCode = require("../errors/statuscode");
 const userDietPrompt = require("../prompts/prompt");
 const { v4: uuidv4 } = require("uuid");
+const { json } = require("express");
+const ReactPDF = require("@react-pdf/renderer");
+const React = require("react");
+const DietDocument = require("../document-templates/documents");
+const fs = require("fs");
 
 const postAiDietician = [
   ensureAuthenticated,
@@ -32,10 +37,18 @@ const postAiDietician = [
       );
     }
 
+    // If height is imperial, then that means we must change the height to inches since all the heights are store
+    // as cm in the database for ease of storage.
+
+    const height =
+      req.user.isImperial === true ? req.user.height / 2.54 : req.user.height;
+
     const dietInfo = userDietPrompt(
       mostRecentWeight.weight,
       req.body.goal,
-      req.body.diet
+      req.body.diet,
+      height,
+      req.user.isImperial
     );
 
     const response = await openai.responses.create({
@@ -50,11 +63,13 @@ const postAiDietician = [
       ],
     });
 
+    const diet = JSON.parse(response.output_text).plan;
+
     res.status(203).json({
       data: {
         message: "Diet has been generated sucessfully!",
         status: 203,
-        diet: response.output_text.plan,
+        diet: diet,
       },
     });
   }),
@@ -70,7 +85,7 @@ const postSaveDiet = [
     const finalJson = JSON.stringify({
       plan: dietJSON,
     });
-    const userId = req.session.passport.user;
+    const userId = req.user.id;
     const dateTime = new Date();
     const entryId = uuidv4();
 
@@ -95,7 +110,7 @@ const deleteEntry = [
   ensureAuthenticated,
   asyncHandler(async (req, res, next) => {
     const dietId = Number(req.params.dietId);
-    const userId = req.session.passport.user;
+    const userId = req.user.id;
     const entry = await prisma.dietEntries.delete({
       where: {
         ownerid: userId,
@@ -125,7 +140,7 @@ const downloadEntry = [
       );
     }
     const dietId = Number(req.params.dietId);
-    const userId = req.session.passport.user;
+    const userId = req.user.id;
     const entry = await prisma.dietEntries.findFirst({
       where: {
         id: dietId,
@@ -136,14 +151,31 @@ const downloadEntry = [
     if (!entry) {
       throw new ErrorWithStatusCode("This entry does not exist!", 400);
     }
+    const dietPlan = JSON.parse(entry.diet);
+    const dietToDownload = JSON.parse(dietPlan.plan);
 
-    res.set({
-      "content-type": "text/plain",
-      "content-disposition": `attachment; filename=${
-        entry.name + entry.createdat
-      }`,
-    });
-    res.send(entry.diet);
+    const stream = await ReactPDF.renderToStream(
+      React.createElement(DietDocument, { diets: dietToDownload })
+    );
+
+    res.set("content-type", "application/pdf");
+    stream.pipe(res);
+
+    //  TODO redo the sending of the diet to incorporate the pdf template I made.
+  }),
+];
+
+const postEntryGeneratedOnClient = [
+  ensureAuthenticated,
+  asyncHandler(async (req, res, next) => {
+    if (!req.body) {
+      throw new ErrorWithStatusCode("You must provide a diet to save!", 400);
+    }
+    const stream = await ReactPDF.renderToStream(
+      React.createElement(DietDocument, { diets: req.body })
+    );
+    res.set("content-type", "application/pdf");
+    stream.pipe(res);
   }),
 ];
 
@@ -152,7 +184,7 @@ const downloadEntry = [
 const getAllDietEntries = [
   ensureAuthenticated,
   asyncHandler(async (req, res, next) => {
-    const userId = req.session.passport.user;
+    const userId = req.user.id;
     const entries = await prisma.dietEntries.findMany({
       where: {
         ownerid: userId,
@@ -179,4 +211,5 @@ module.exports = {
   downloadEntry,
   getAllDietEntries,
   postSaveDiet,
+  postEntryGeneratedOnClient,
 };
