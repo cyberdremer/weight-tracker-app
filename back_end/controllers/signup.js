@@ -24,7 +24,7 @@ const createAccount = [
         passwordhash: hashedpassword,
         isImperial: req.body.units === "lbs" ? true : false,
         height: height,
-        dateofbirth: req.body.dob
+        dateofbirth: new Date(req.body.dob)
       },
     });
 
