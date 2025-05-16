@@ -18,7 +18,7 @@ const postWeightEntry = [
       throw new ErrorWithStatusCode(errors.array()[0].msg, 400);
     }
 
-    const userId = req.session.passport.user;
+    const userId = req.user.id;
 
     const entry = await prisma.weightEntries.findFirst({
       where: {
