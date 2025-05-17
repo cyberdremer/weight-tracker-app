@@ -28,7 +28,7 @@ model User {
 
 model WeightEntries {
   id        Int      @id @default(autoincrement())
-  owner     User     @relation(fields: [ownerid], references: [id])
+  owner     User     @relation(fields: [ownerid], references: [id], onDelete: Cascade)
   ownerid   Int
   createdat DateTime @default(now()) @db.Date
   weight    Decimal
@@ -37,7 +37,7 @@ model WeightEntries {
 
 model DietEntries {
   id        Int      @id @default(autoincrement())
-  owner     User     @relation(fields: [ownerid], references: [id])
+  owner     User     @relation(fields: [ownerid], references: [id], onDelete: Cascade)
   ownerid   Int
   diet      String
   name      String
