@@ -6,7 +6,6 @@ const AiDieticianResponseContainer = ({
   response,
   handleDownload,
   handleSaveToAccount,
-
 }) => {
   return (
     <>
@@ -16,6 +15,8 @@ const AiDieticianResponseContainer = ({
         flexDirection="column"
         alignItems="center"
         gap="10"
+        animationName="fade-in"
+        animationDuration="slowest"
       >
         <Heading>Ai Generated Diet</Heading>
         <Box overflowY="auto" maxHeight="30rem" boxShadow="md">
