@@ -1,9 +1,19 @@
-const userDietPrompt = (currWeight, weightGoal, dietaryRestriction) => {
+
+
+const userDietPrompt = (
+  currWeight,
+  weightGoal,
+  dietaryRestriction,
+  height,
+  isImperial
+) => {
   return `Create a diet plan for someone based on the text below.
     Text: """
     Current Weight: ${currWeight}
     Weight Goal: ${weightGoal}
     Dietary Restrictions: ${dietaryRestriction}
+    Height: ${height + (isImperial === true ? "in" : "cm")}
+    
 
     """
 
@@ -13,4 +23,5 @@ const userDietPrompt = (currWeight, weightGoal, dietaryRestriction) => {
     `;
 };
 
+// TODO change the unit based on isImperial field on user.
 module.exports = userDietPrompt;
