@@ -8,6 +8,7 @@ const InfoProvider = ({ children }) => {
     email: "",
     isImperial: false,
     height: 0,
+    dob: "",
   });
 
   const updateUser = (user) => {
@@ -17,6 +18,7 @@ const InfoProvider = ({ children }) => {
       fullname: user.fullname,
       email: user.email,
       height: user.height,
+      dob: user.dateofbirth,
     });
   };
 
@@ -25,12 +27,13 @@ const InfoProvider = ({ children }) => {
       fullname: "",
       isImperial: false,
       email: "",
-      height: 0
+      height: 0,
+      dob: "",
     });
   };
 
   return (
-    <InfoContext.Provider value={{ updateUser, clearUser, user }}>
+    <InfoContext.Provider value={{ updateUser, clearUser, user, setUser }}>
       {children}
     </InfoContext.Provider>
   );
