@@ -5,10 +5,12 @@ const {
   getAllDietEntries,
   deleteEntry,
   downloadEntry,
-  postSaveDiet
+  postSaveDiet,
+  postEntryGeneratedOnClient,
 } = require("../controllers/dietician");
 
 dieticianRouter.post("/", postAiDietician);
+dieticianRouter.post("/generatedietpdf", postEntryGeneratedOnClient);
 dieticianRouter.get("/generateddiet", getAllDietEntries);
 dieticianRouter.post("/savediet", postSaveDiet);
 dieticianRouter.get("/generateddiet/:dietId", downloadEntry);
