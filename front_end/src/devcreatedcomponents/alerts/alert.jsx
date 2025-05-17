@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import GenericModal from "../modal/genericmodal";
 
-const DeleteAccountAlert = ({ open, handleDelete, handleClose }) => {
+const DeleteAccountAlert = ({ open, handleDelete, handleClose, value, onChange }) => {
   return (
     <GenericModal
       open={open}
@@ -28,6 +28,8 @@ const DeleteAccountAlert = ({ open, handleDelete, handleClose }) => {
             type="password"
             name="password"
             placeholder="Enter your password"
+            value={value}
+            onChange={onChange}
           ></Input>
       </Stack>
     </GenericModal>
