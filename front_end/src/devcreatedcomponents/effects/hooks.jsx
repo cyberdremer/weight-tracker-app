@@ -30,4 +30,30 @@ const useFetchData = (endpoint) => {
   return { entries, error, loading, setEntries };
 };
 
-export default useFetchData;
+const useFetchDiets = (endpoint) => {
+  const [diets, setDiets] = useState([]);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDiets = async () => {
+      try {
+        const response = await protectedGetRequest(endpoint);
+        if (response.error) {
+          throw new Error(response.error.message);
+        }
+
+        setDiets(response.data.entries);
+        setLoading(false);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDiets();
+  }, []);
+
+  return { diets, error, loading, setDiets };
+};
+export { useFetchData, useFetchDiets };
