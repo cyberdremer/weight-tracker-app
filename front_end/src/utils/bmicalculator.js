@@ -7,7 +7,7 @@ const calculateBMIUsingImperial = (heightInInches, weightP) => {
   return imperialBMIConstant * (weightP / heightInInches ** 2);
 };
 
-export { calculateBMIUsingImperial, calculateBMIUsingImperial };
+export { calculateBMIUsingImperial, calulateBMIUsingMetric };
 
 
 
