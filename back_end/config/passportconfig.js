@@ -9,10 +9,15 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = prisma.user.findUniqueOrThrow({
+    const user = await prisma.user.findUniqueOrThrow({
       where: {
         id: id,
       },
+      select: {
+        isImperial: true,
+        height: true,
+        id: true,
+      }
     });
     done(null, user);
   } catch (error) {
