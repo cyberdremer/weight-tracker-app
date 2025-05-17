@@ -1,10 +1,17 @@
-import { protectedDeleteRequest, protectedGetRequest } from "@/utils/requests";
-import useFetchData from "../effects/hooks";
+import {
+  protectedDeleteRequest,
+  protectedGetRequest,
+  protectedGetRequestDownload,
+} from "@/utils/requests";
+import { useFetchData, useFetchDiets } from "../effects/hooks";
 import DashboardHeader from "../fragments/dashboard/dashboardheader";
 import DownloadDietCardContainer from "../fragments/downloadcardcontainer";
 import { SuccessAlert, ErrorAlert } from "../alerts/alert";
-import { Flex } from "@chakra-ui/react";
+import { Flex, Heading, Stack } from "@chakra-ui/react";
 import { useState } from "react";
+import LoadingPlaceholder from "../fragments/loading";
+import EmptyContainer from "../fragments/emptycontainer";
+import download from "downloadjs";
 const env = import.meta.env.VITE_ENV;
 const prodTimer = import.meta.env.VITE_PROD_ALERT_TIMER;
 const devTimer = import.meta.env.VITE_DEV_ALERT_TIMER;
@@ -40,21 +47,22 @@ const DownloadDiets = () => {
     message: "",
   });
 
-  const { entries, error, loading, setEntries } = useFetchData(
+  const { diets, error, loading, setDiets } = useFetchDiets(
     "/dietician/generateddiet"
   );
   const handleDownload = async (id) => {
     const dietId = id;
     try {
-      const response = await protectedGetRequest(
+      const response = await protectedGetRequestDownload(
         `/dietician/generateddiet/${dietId}`
       );
+      download(response);
       if (!response.error) {
         throw new Error(response.error.message);
       }
       setResponseSuccess({
         success: true,
-        message: response.data.message,
+        message: "File has been succesfully downloaded",
       });
 
       setTimeout(() => {
@@ -83,14 +91,14 @@ const DownloadDiets = () => {
       const response = await protectedDeleteRequest(
         `/dietician/generateddiet/${dietId}`
       );
-      if (!response.error) {
+      if (response.error) {
         throw new Error(response.error.message);
       }
       setResponseSuccess({
         success: true,
         message: response.data.message,
       });
-      setEntries(entries.filter((entry) => id !== entry.id));
+      setDiets(diets.filter((diet) => id !== diet.id));
       setTimeout(() => {
         setResponseSuccess({
           success: false,
@@ -121,14 +129,37 @@ const DownloadDiets = () => {
           <SuccessAlert message={responseSuccess.message}></SuccessAlert>
         )}
         <DashboardHeader></DashboardHeader>
-        <DownloadDietCardContainer
-          diets={entries}
-          deleteDiet={handleDelete}
-          downloadDiet={handleDownload}
-        ></DownloadDietCardContainer>
+
+        {error && (
+          <ErrorAlert
+            message={"An error has occurred, please refresh the page"}
+          ></ErrorAlert>
+        )}
+        {loading && <LoadingPlaceholder></LoadingPlaceholder>}
+        {(() => {
+          if (!loading) {
+            if (diets.length > 0) {
+              return (
+                <DownloadDietCardContainer
+                  diets={diets}
+                  deleteDiet={handleDelete}
+                  downloadDiet={handleDownload}
+                ></DownloadDietCardContainer>
+              );
+            } else {
+              return (
+                <EmptyContainer
+                  message="There are no diets to download, generate some and comeback to download
+                  and manage them!"
+                ></EmptyContainer>
+              );
+            }
+          }
+        })()}
       </Flex>
     </>
   );
 };
+
 
 export default DownloadDiets;
