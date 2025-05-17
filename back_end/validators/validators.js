@@ -86,16 +86,17 @@ const signupValidation = [
     })
     .withMessage(`Height: must be a positive, non-zero number`),
 
-  body("dob").custom((value) => {
-    const today = new Date();
-    const userDob = new Date(value);
+  body("dob")
+    .custom((value) => {
+      const today = new Date();
+      const userDob = new Date(value);
 
-    const diff = today.getTime() - userDob.getTime();
+      const diff = today.getTime() - userDob.getTime();
 
-    const years = diff / (1000 * 60 * 60 * 24 * 7 * 52);
-    return years >= 18;
-  })
-  .withMessage(`Date of Birth: User must be 18!`)
+      const years = diff / (1000 * 60 * 60 * 24 * 7 * 52);
+      return years >= 18;
+    })
+    .withMessage(`Date of Birth: User must be 18!`),
 ];
 
 const loginValidation = [
@@ -130,20 +131,14 @@ const createWeightEntryValidation = [
 ];
 
 const updateAccountValidation = [
-  body("dob")
+  body("height")
     .trim()
     .notEmpty()
     .withMessage(`Fullname: ${emptyError}`)
-    .isDate()
-    .withMessage(`Date Of Birth: must be a valid date of birth!`),
-
-  body("units")
-    .trim()
-    .notEmpty()
-    .withMessage(`Units: ${emptyError}`)
     .custom((value) => {
-      return value === "kgs" || value === "lbs";
-    }),
+      return value > 0;
+    })
+    .withMessage(`Height: must be a non-zero number`),
 ];
 
 const dietValidation = [
@@ -157,6 +152,10 @@ const dateFilterValidation = [
 
   body("enddate").trim().notEmpty().withMessage(`End Date: ${emptyError}`),
 ];
+
+const deleteAccountValidation = [
+  body("password").trim().notEmpty().withMessage(`Password: ${emptyError}`),
+];
 module.exports = {
   signupValidation,
   loginValidation,
@@ -164,4 +163,5 @@ module.exports = {
   updateAccountValidation,
   dietValidation,
   dateFilterValidation,
+  deleteAccountValidation,
 };
