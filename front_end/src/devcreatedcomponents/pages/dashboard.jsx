@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
-import { Flex } from "@chakra-ui/react";
+import { Flex, Stack, ProgressCircle } from "@chakra-ui/react";
 import ViewEntries from "../fragments/viewentries";
 import DashboardHeader from "../fragments/dashboard/dashboardheader";
-import useFetchData from "../effects/hooks";
+import { useFetchData } from "../effects/hooks";
 import DashboardCharts from "../fragments/dashboard/dashboardcharts";
 import { protectedGetRequest } from "@/utils/requests";
 import {
@@ -10,6 +10,8 @@ import {
   calulateBMIUsingMetric,
 } from "@/utils/bmicalculator";
 import { InfoContext } from "../context/InfoContext";
+import LoadingPlaceholder from "../fragments/loading";
+import { ErrorAlert, SuccessAlert } from "../alerts/alert";
 
 const mockItems = [
   {
@@ -46,7 +48,10 @@ const mockItems = [
 const Dashboard = () => {
   // const { entries, error, loading, setEntries } =
   //   useFetchData("/weight/retrieve");
+
+  const { entries, error, loading } = useFetchData("/weight/retrieve");
   const { user } = useContext(InfoContext);
+
   const setEntries = () => {};
 
   const [isImperial, setIsImperial] = useState(true);
@@ -125,15 +130,29 @@ const Dashboard = () => {
     <>
       <Flex grow="1" direction="column" minH="100vh" gap="10  ">
         <DashboardHeader name={user.fullname}></DashboardHeader>
-        <DashboardCharts
-          entries={mockItems}
-          setEntries={setEntries}
-          handleRefreshEntries={handleRefreshEntries}
-          handleSearchEntries={handleSearchEntries}
-          form={form}
-          setForm={setForm}
-        ></DashboardCharts>
-        <ViewEntries entries={mockItems}></ViewEntries>
+        {loading && <LoadingPlaceholder></LoadingPlaceholder>}
+        {error && (
+          <ErrorAlert message="Error please reload the page!"></ErrorAlert>
+        )}
+        {responseError.error && (
+          <ErrorAlert message={responseError.message}></ErrorAlert>
+        )}
+        {responseSuccess.success && (
+          <SuccessAlert message={responseSuccess.success}></SuccessAlert>
+        )}
+        {error === false && loading === false && (
+          <>
+            <DashboardCharts
+              entries={mockItems}
+              setEntries={setEntries}
+              handleRefreshEntries={handleRefreshEntries}
+              handleSearchEntries={handleSearchEntries}
+              form={form}
+              setForm={setForm}
+            ></DashboardCharts>
+            <ViewEntries entries={mockItems}></ViewEntries>
+          </>
+        )}
       </Flex>
     </>
   );
