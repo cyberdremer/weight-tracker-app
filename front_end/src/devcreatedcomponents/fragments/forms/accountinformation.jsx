@@ -5,41 +5,152 @@ import {
   Fieldset,
   Button,
   createListCollection,
-  Avatar
+  Avatar,
+  InputGroup,
 } from "@chakra-ui/react";
 import SelectFragment from "../select";
 import { useContext, useState } from "react";
-import { DeleteAccountAlert } from "@/devcreatedcomponents/alerts/alert";
+import {
+  DeleteAccountAlert,
+  ErrorAlert,
+  SuccessAlert,
+} from "@/devcreatedcomponents/alerts/alert";
 import { red } from "@mui/material/colors";
 import { InfoContext } from "@/devcreatedcomponents/context/InfoContext";
+import {
+  convertCentimetersToFeet,
+  convertCentimeteresToMeters,
+} from "@/utils/unitconversions";
+import { protectedDeleteRequest, protectedPostRequest } from "@/utils/requests";
+import timer from "@/utils/timer";
+import { useNavigate } from "react-router";
 
 const units = createListCollection({
   items: ["kgs", "lbs"],
 });
 
 const AccountInformation = ({ name, email, dob }) => {
+  const navigate = useNavigate();
   // TODO Handle all the updating in this component, only handle visibility of errors  in hte parent component.
-  const {user} = useContext(InfoContext);
+  const { user, setUser } = useContext(InfoContext);
   const [deleteVisbility, setDeleteVisibility] = useState(false);
+
+  const [success, setSuccess] = useState({
+    message: "",
+    occurred: false,
+  });
+
+  const [error, setError] = useState({
+    message: "",
+    occurred: false,
+  });
+
   const setVisibility = () => {
     setDeleteVisibility(!deleteVisbility);
   };
 
   const [form, setForm] = useState({
-    fullname: "",
-    units: "",
+    height: "",
+    password: "",
   });
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const height =
+    user.isImperial === true
+      ? convertCentimetersToFeet(user.height)
+      : convertCentimeteresToMeters(user.height);
 
   // TODO Add handle delete and handle change functions
 
-  const handleDelete = () => {};
-  const handleChange = (e) => {};
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await protectedDeleteRequest("/account/delete", {
+        password: form.password,
+      });
+      if (response.error) {
+        throw new Error(response.error.message);
+      }
+      setSuccess({
+        message:
+          "Account has been succesfully deleted. Redirecting you to the homepage",
+        occurred: true,
+      });
+      setTimeout(() => {
+        setSuccess({
+          message: "",
+          occurred: false,
+        });
+        navigate("/");
+      }, timer);
+    } catch (error) {
+      setError({
+        message: error.message,
+        occurred: true,
+      });
+
+      setTimeout(() => {
+        setError({
+          message: "",
+          occurred: false,
+        });
+      }, timer);
+    }
+  };
+
+  const handleUpdateHeight = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await protectedPostRequest("/account/update", {
+        height: form.height,
+      });
+      if (response.error) {
+        throw new Error(response.error.message);
+      }
+
+      setSuccess({
+        message: response.data.message,
+        occurred: true,
+      });
+
+      setUser({ ...user, height: form.height });
+
+      setTimeout(() => {
+        setSuccess({
+          message: "",
+          occurred: false,
+        });
+      }, timer);
+    } catch (error) {
+      setError({
+        message: error.message,
+        occurred: true,
+      });
+
+      setTimeout(() => {
+        setError({
+          message: "",
+          occurred: false,
+        });
+      });
+    }
+  };
+
   return (
     <>
+      {error.occurred && <ErrorAlert message={error.message}></ErrorAlert>}
+      {success.occurred && (
+        <SuccessAlert message={success.message}></SuccessAlert>
+      )}
       <DeleteAccountAlert
         open={deleteVisbility}
         handleDelete={handleDelete}
         handleClose={setVisibility}
+        value={form.password}
+        onChange={handleChange}
       ></DeleteAccountAlert>
       <Fieldset.Root
         size="lg"
@@ -51,7 +162,9 @@ const AccountInformation = ({ name, email, dob }) => {
       >
         <Stack>
           <Avatar.Root alignSelf="center" size="2xl">
-            <Avatar.Fallback name={user.fullname || "Ai Artist"}></Avatar.Fallback>
+            <Avatar.Fallback
+              name={user.fullname || "Ai Artist"}
+            ></Avatar.Fallback>
           </Avatar.Root>
           <Fieldset.Legend>Account Details</Fieldset.Legend>
         </Stack>
@@ -74,17 +187,33 @@ const AccountInformation = ({ name, email, dob }) => {
           </Field.Root>
           <Field.Root>
             <Field.Label>Date of Birth:</Field.Label>
-            <Input name="dob" type="date" value={dob} disabled></Input>
+            <Input
+              name="dob"
+              value={new Date(user.dob).toDateString()}
+              disabled
+            ></Input>
           </Field.Root>
 
           <Field.Root>
-            <SelectFragment
-              selectItems={units}
-              placeholder={"kgs"}
-              label={"Enter your desired units"}
-              name="units"
-              handleClick={handleChange}
-            ></SelectFragment>
+            <Field.Label>Height:</Field.Label>
+            <InputGroup endElement={user.isImperial === true ? "ft" : "cm"}>
+              <Input
+                name="height"
+                placeholder={
+                  user.isImperial === true
+                    ? convertCentimetersToFeet(user.height)
+                    : convertCentimeteresToMeters(user.height)
+                }
+                type="number"
+              ></Input>
+            </InputGroup>
+          </Field.Root>
+
+          <Field.Root>
+            <Field.Label>Change height </Field.Label>
+            <InputGroup endElement={user.isImperial === true ? "in" : "cm"}>
+              <Input name="newheight" type="number"></Input>
+            </InputGroup>
           </Field.Root>
         </Fieldset.Content>
 
