@@ -23,7 +23,7 @@ const strategyImplementation = async (email, password, done) => {
       return done(null, false, { message: "Invalid Credentials" });
     }
     if (!match) {
-      return done(null, false, { message: "Incorrect credentials" });
+      return done(null, false, { message: "Invalid credentials" });
     }
 
     return done(null, user);
