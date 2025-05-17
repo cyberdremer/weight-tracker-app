@@ -17,7 +17,7 @@ const getWeightDataForMonth = [
       searchedDate.getMonth() + 1,
       0
     );
-    const userId = req.session.passport.user;
+    const userId = req.user.id;
     const dateData = await prisma.weightEntries.findMany({
       where: {
         ownerid: userId,
@@ -28,11 +28,11 @@ const getWeightDataForMonth = [
       },
     });
 
-    res.status(302).json({
+    res.status(200).json({
       data: {
         entries: dateData,
         message: "Data successfully retrieved",
-        status: 302,
+        status: 200,
       },
     });
   }),
@@ -59,7 +59,7 @@ const getWeightDataForSpecifiedTimeFrame = [
       );
     }
 
-    const userId = req.session.passport.user;
+    const userId = req.user.id;
 
     const weightData = await prisma.weightEntries.findMany({
       where: {
@@ -80,11 +80,11 @@ const getWeightDataForSpecifiedTimeFrame = [
         },
       });
     } else {
-      res.status(302).json({
+      res.status(200).json({
         data: {
           entries: weightData,
           message: "Data sucesfully retrieved",
-          status: 302,
+          status: 200,
         },
       });
     }
