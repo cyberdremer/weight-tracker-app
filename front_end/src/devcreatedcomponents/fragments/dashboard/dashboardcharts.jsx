@@ -20,8 +20,8 @@ import { ErrorAlert, SuccessAlert } from "@/devcreatedcomponents/alerts/alert";
 const env = import.meta.env.VITE_ENV;
 const prodTimer = import.meta.env.VITE_PROD_ALERT_TIMER;
 const devTimer = import.meta.env.VITE_DEV_ALERT_TIMER;
-const timer = env === "dev" ? devTimer : prodTimer;
-import useFetchData from "@/devcreatedcomponents/effects/hooks";
+import timer from "@/utils/timer";
+import {useFetchData} from "@/devcreatedcomponents/effects/hooks";
 const DashboardCharts = ({
   entries,
   setEntries,
