@@ -30,7 +30,7 @@ const AiDieticianForm = ({diet, goal, handleDietSelect, handleGoalSelect, handle
     <>
       <Fieldset.Root
         size="lg"
-        maxW="md"
+        maxW="xl"
         alignSelf="normal"
         animationName="fade-in"
         animationDuration="slowest"
