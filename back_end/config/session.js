@@ -7,8 +7,9 @@ const sessionConfig = session({
   secret: process.env.SESSION_SECRET,
   cookie: {
     maxAge: 24 * 60 * 60 * 1000,
-    secure: false,
-    sameSite: "lax"
+    secure: process.env.NODE_ENV === "dev" ? false : true,
+    sameSite: process.env.NODE_ENV === "dev" ? "lax" : "none",
+    httpOnly: process.env.NODE_ENV === "dev" ? false : true,
   },
 
   resave: false,
@@ -17,7 +18,7 @@ const sessionConfig = session({
     checkPeriod: 2 * 60 * 1000, //ms
     dbRecordIdIsSessionId: false,
     dbRecordIdFunction: undefined,
-    logger: console 
+    logger: console,
   }),
 });
 
