@@ -9,7 +9,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await prisma.user.findUniqueOrThrow({
+    const user = await prisma.user.findUnique({
       where: {
         id: id,
       },
@@ -17,6 +17,7 @@ passport.deserializeUser(async (id, done) => {
         isImperial: true,
         height: true,
         id: true,
+        fullname: true
       }
     });
     done(null, user);
