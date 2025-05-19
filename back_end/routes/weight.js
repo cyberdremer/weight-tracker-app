@@ -1,8 +1,8 @@
 const { Router } = require("express");
 const weightRouter = Router();
 const {
-  getWeightDataForMonth,
   getWeightDataForSpecifiedTimeFrame,
+  getWeightDataForPastThirtyDays,
 } = require("../controllers/weightdata");
 const {
   postWeightEntry,
@@ -14,6 +14,9 @@ weightRouter.get(
   "/retrieve/:startmonth-:startday-:startyear-:endmonth-:endday-:endyear",
   getWeightDataForSpecifiedTimeFrame
 );
-weightRouter.get("/retrieve", getWeightDataForMonth);
+weightRouter.get("/retrieve", getWeightDataForPastThirtyDays);
 weightRouter.delete("/entry/:month-:day-:year", deleteWeightEntry);
 module.exports = weightRouter;
+
+
+
