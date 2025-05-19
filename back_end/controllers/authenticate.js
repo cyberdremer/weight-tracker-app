@@ -7,11 +7,16 @@ const authCheck = [
       data: {
         message: "You are authenticated!",
         status: 201,
+        user: {
+          fullname: req.user.fullname,
+          height: req.user.height,
+          id: req.user.id,
+          isImperial: req.user.isImperial,
+        },
         auth: req.isAuthenticated(),
       },
     });
   }),
 ];
-
 
 module.exports = authCheck;
