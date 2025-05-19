@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
-import { Flex, Stack, ProgressCircle } from "@chakra-ui/react";
+import { Flex, Stack, ProgressCircle, Em } from "@chakra-ui/react";
 import ViewEntries from "../fragments/viewentries";
 import DashboardHeader from "../fragments/dashboard/dashboardheader";
 import { useFetchData } from "../effects/hooks";
 import DashboardCharts from "../fragments/dashboard/dashboardcharts";
-import { protectedGetRequest } from "@/utils/requests";
+import { protectedGetRequest, protectedGetRequestForm } from "@/utils/requests";
 import {
   calculateBMIUsingImperial,
   calulateBMIUsingMetric,
@@ -12,6 +12,8 @@ import {
 import { InfoContext } from "../context/InfoContext";
 import LoadingPlaceholder from "../fragments/loading";
 import { ErrorAlert, SuccessAlert } from "../alerts/alert";
+import EmptyContainer from "../fragments/emptycontainer";
+import timer from "@/utils/timer";
 
 const mockItems = [
   {
@@ -45,6 +47,7 @@ const mockItems = [
     notes: "Need to eat more protein",
   },
 ];
+
 const Dashboard = () => {
   // const { entries, error, loading, setEntries } =
   //   useFetchData("/weight/retrieve");
@@ -74,14 +77,34 @@ const Dashboard = () => {
   const handleSearchEntries = async (e) => {
     e.preventDefault();
     try {
-      const response = await protectedGetRequest(`/weight/retrieve`, form);
-      if (!response.error) {
+      if(form.startdate === "" || form.enddate === ""){
+        throw new Error("Search criteria cannot be empty!")
+      }
+      const searchStartDate = new Date(form.startdate)
+        .toLocaleDateString()
+        .replaceAll("/", "-");
+      const searchEndDate = new Date(form.enddate)
+        .toLocaleDateString()
+        .replaceAll("/", "-");
+      const response = await protectedGetRequest(
+        `/weight/retrieve/${searchStartDate + "-" + searchEndDate}`
+      );
+      if (response.error) {
         throw new Error(response.error.message);
       }
       setResponseSuccess({
         success: true,
         message: response.data.message,
       });
+
+      const searchEntries = response.data.entries.map((entry) => ({
+        date: new Date(entry.createdat).toLocaleDateString(),
+        id: entry.id,
+        note: entry.notes,
+        weight: entry.weight,
+      }));
+
+      setEntries(searchEntries);
 
       setTimeout(() => {
         setResponseSuccess({
@@ -107,19 +130,36 @@ const Dashboard = () => {
   const handleRefreshEntries = async (e) => {
     e.preventDefault();
     try {
-    } catch (error) {
       const response = await protectedGetRequest(`/weight/retrieve`);
-      if (!response.error) {
+      if (response.error) {
         throw new Error(response.error.message);
       }
       setResponseSuccess({
         success: true,
         message: response.data.message,
       });
-      setEntries(response.data.entries);
+      setEntries(
+        response.data.entries.map(({ createdat, weight, notes, id }) => ({
+          id: id,
+          notes: notes,
+          weight: weight,
+          date: new Date(createdat).toLocaleDateString(),
+        }))
+      );
       setTimeout(() => {
         setResponseSuccess({
           success: false,
+          message: "",
+        });
+      }, timer);
+    } catch (error) {
+      setResponseError({
+        error: true,
+        message: error.message,
+      });
+      setTimeout(() => {
+        setResponseError({
+          error: false,
           message: "",
         });
       }, timer);
@@ -138,21 +178,37 @@ const Dashboard = () => {
           <ErrorAlert message={responseError.message}></ErrorAlert>
         )}
         {responseSuccess.success && (
-          <SuccessAlert message={responseSuccess.success}></SuccessAlert>
+          <SuccessAlert message={responseSuccess.message}></SuccessAlert>
         )}
-        {error === false && loading === false && (
-          <>
-            <DashboardCharts
-              entries={mockItems}
-              setEntries={setEntries}
-              handleRefreshEntries={handleRefreshEntries}
-              handleSearchEntries={handleSearchEntries}
-              form={form}
-              setForm={setForm}
-            ></DashboardCharts>
-            <ViewEntries entries={mockItems}></ViewEntries>
-          </>
-        )}
+        {(() => {
+          if (!loading && !error) {
+            if (entries.length > 0) {
+              return (
+                <>
+                  <DashboardCharts
+                    entries={entries}
+                    setEntries={setEntries}
+                    handleRefreshEntries={handleRefreshEntries}
+                    handleSearchEntries={handleSearchEntries}
+                    form={form}
+                    setForm={setForm}
+                    isChecked={isImperial}
+                    handleCheckedChange={setIsImperial}
+                  ></DashboardCharts>
+                  <ViewEntries entries={entries}></ViewEntries>
+                </>
+              );
+            } else {
+              return (
+                <EmptyContainer
+                  message={
+                    "There are no entries to visualize data for! Start logging so we can start charting"
+                  }
+                ></EmptyContainer>
+              );
+            }
+          }
+        })()}
       </Flex>
     </>
   );
