@@ -3,27 +3,28 @@ const prisma = require("../config/prismaclient");
 const ensureAuthenticated = require("../middleware/authenticated");
 const ErrorWithStatusCode = require("../errors/statuscode");
 
-const getWeightDataForMonth = [
+const getWeightDataForPastThirtyDays = [
   ensureAuthenticated,
   asyncHandler(async (req, res, next) => {
-    const searchedDate = new Date();
-    const firstDay = new Date(
-      searchedDate.getFullYear(),
-      searchedDate.getMonth(),
-      1
-    );
-    const lastDay = new Date(
-      searchedDate.getFullYear(),
-      searchedDate.getMonth() + 1,
-      0
-    );
+    const today = new Date();
+    const thirtyDaysAgo = new Date(today.getDate() - 30);
+    // const firstDay = new Date(
+    //   searchedDate.getFullYear(),
+    //   searchedDate.getMonth(),
+    //   1
+    // );
+    // const lastDay = new Date(
+    //   searchedDate.getFullYear(),
+    //   searchedDate.getMonth() + 1,
+    //   0
+    // );
     const userId = req.user.id;
     const dateData = await prisma.weightEntries.findMany({
       where: {
         ownerid: userId,
         createdat: {
-          gte: firstDay,
-          lte: lastDay,
+          gte: thirtyDaysAgo,
+          lte: today,
         },
       },
     });
@@ -69,14 +70,13 @@ const getWeightDataForSpecifiedTimeFrame = [
           lte: endDate,
         },
       },
-
     });
 
     if (weightData.length === 0) {
       res.status(404).json({
         error: {
           message: "There were no entries found",
-          statu: 404,
+          status: 404,
         },
       });
     } else {
@@ -91,4 +91,4 @@ const getWeightDataForSpecifiedTimeFrame = [
   }),
 ];
 
-module.exports = { getWeightDataForMonth, getWeightDataForSpecifiedTimeFrame };
+module.exports = {  getWeightDataForSpecifiedTimeFrame, getWeightDataForPastThirtyDays };
