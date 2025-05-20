@@ -11,20 +11,26 @@ import {
   HStack,
   Button,
   Switch,
+  FormatNumber,
+  Text,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { protectedGetRequest } from "@/utils/requests";
 import ViewEntries from "../viewentries";
 import { ErrorAlert, SuccessAlert } from "@/devcreatedcomponents/alerts/alert";
-
+import {
+  calculateBMIUsingImperial,
+  calulateBMIUsingMetric,
+} from "@/utils/bmicalculator";
 const env = import.meta.env.VITE_ENV;
 const prodTimer = import.meta.env.VITE_PROD_ALERT_TIMER;
 const devTimer = import.meta.env.VITE_DEV_ALERT_TIMER;
+import { convertMetricKilosToImperialPounds } from "@/utils/unitconversions";
 import timer from "@/utils/timer";
-import {useFetchData} from "@/devcreatedcomponents/effects/hooks";
+import { useFetchData } from "@/devcreatedcomponents/effects/hooks";
+import { InfoContext } from "@/devcreatedcomponents/context/InfoContext";
 const DashboardCharts = ({
   entries,
-  setEntries,
   form,
   setForm,
   handleSearchEntries,
@@ -32,6 +38,7 @@ const DashboardCharts = ({
   isChecked,
   handleCheckedChange,
 }) => {
+  const { user } = useContext(InfoContext);
   const margin = { right: 24 };
   const uData = [4000, 3000, 2000, 2780, 1890, 2390, 3490];
   const pData = [2400, 1398, 9800, 3908, 4800, 3800, 4300];
@@ -40,7 +47,11 @@ const DashboardCharts = ({
   });
 
   const weightData = entries.map((entry) => {
-    return entry.weight;
+    if (user.isImperial) {
+      return convertMetricKilosToImperialPounds(entry.weight);
+    } else {
+      return entry.weight;
+    }
   });
   const xLabels = [
     "Page A",
@@ -52,13 +63,7 @@ const DashboardCharts = ({
     "Page G",
   ];
 
-
-
   const [isImperial, setIsImperial] = useState(true);
-
-  
-
-  
 
   return (
     <>
@@ -101,39 +106,73 @@ const DashboardCharts = ({
             <Button type="submit" onClick={handleRefreshEntries}>
               Refresh Calendar
             </Button>
-            <Switch.Root
+            {/* <Switch.Root
               variant={"raised"}
-              checked={isImperial}
-              onCheckedChange={(isImperial) => setIsImperial(!isImperial)}
+              checked={isChecked}
+              onCheckedChange={(isChecked) => handleCheckedChange(!isChecked)}
             >
               <Switch.HiddenInput></Switch.HiddenInput>
               <Switch.Control></Switch.Control>
 
               <Switch.Label>Change weight units</Switch.Label>
-            </Switch.Root>
+            </Switch.Root> */}
           </HStack>
-          <Heading textAlign="center">Your Weight Trends for {}</Heading>
+          <Heading textAlign="center">
+            Your Weight Trends for{" "}
+            {`${entries[0].date + " -  " + entries[entries.length - 1].date}`}
+          </Heading>
 
           <Container>
             <LineChart
               height={300}
               series={[
-                // {data: weightData, label: "Weight"}
-                { data: pData, label: "pv" },
-                { data: uData, label: "uv" },
+                {
+                  data: weightData,
+                  label: `Weight in ${user.isImperial === true ? "lb" : "kg"}`,
+                },
+                // { data: pData, label: "pv" },
+                // { data: uData, label: "uv" },
               ]}
-              // xAxis ={[{scaleType: "point", data: xDateLabels}]}
-              xAxis={[{ scaleType: "point", data: xLabels }]}
+              xAxis={[{ scaleType: "point", data: xDateLabels }]}
+              // xAxis={[{ scaleType: "point", data: xLabels }]}
               yAxis={[{ width: 50 }]}
               margin={margin}
+              grid={{ vertical: true, horizontal: true }}
             />
           </Container>
         </VStack>
-
+        <VStack>
+          <Heading size="2xl">
+            Your weight for {`${entries[entries.length - 1].date}`} is
+          </Heading>
+          <Text textStyle="2xl">
+            <FormatNumber
+              value={
+                user.isImperial === true
+                  ? convertMetricKilosToImperialPounds(
+                      entries[entries.length - 1].weight
+                    )
+                  : entries[entries.length - 1].weight
+              }
+              style="unit"
+              unit={user.isImperial === true ? "pound" :"kilogram"}
+            ></FormatNumber>
+          </Text>
+        </VStack>
         <VStack marginTop="4">
-          <Heading>BMI for {}</Heading>
+          <Heading>BMI for {`${entries[entries.length - 1].date}`}</Heading>
           <Gauge
-            value={0 }
+            value={
+              user.isImperial === true
+                ? calculateBMIUsingImperial(
+                    Number(user.height) / 2.54,
+                    entries[entries.length - 1].weight * 2.20462262
+                  )
+                : calulateBMIUsingMetric(
+                    Number(user.height) / 100,
+                    entries[entries.length - 1].weight
+                  )
+            }
             startAngle={-90}
             endAngle={90}
             innerRadius="80%"
