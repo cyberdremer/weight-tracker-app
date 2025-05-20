@@ -8,7 +8,7 @@ const InfoProvider = ({ children }) => {
     email: "",
     isImperial: false,
     height: 0,
-    dob: "",
+    dateofbirth: "",
   });
 
   const updateUser = (user) => {
@@ -18,7 +18,7 @@ const InfoProvider = ({ children }) => {
       fullname: user.fullname,
       email: user.email,
       height: user.height,
-      dob: user.dateofbirth,
+      dateofbirth: user.dateofbirth,
     });
   };
 
@@ -28,7 +28,7 @@ const InfoProvider = ({ children }) => {
       isImperial: false,
       email: "",
       height: 0,
-      dob: "",
+      dateofbirth: "",
     });
   };
 
