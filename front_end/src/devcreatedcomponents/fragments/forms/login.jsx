@@ -10,7 +10,7 @@ const prodTimer = import.meta.env.VITE_PROD_ALERT_TIMER;
 const devTimer = import.meta.env.VITE_DEV_ALERT_TIMER;
 const timer = env === "dev" ? devTimer : prodTimer;
 const LogInForm = () => {
-  const { authed, logIn, logOut } = useContext(AuthContext);
+  const { setAuthed } = useContext(AuthContext);
   const { user, clearUser, updateUser } = useContext(InfoContext);
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -44,13 +44,14 @@ const LogInForm = () => {
         occurred: true,
       });
       updateUser(response.data.user);
-      logIn();
+      setAuthed(true);
+
       setTimeout(() => {
         setSuccess({
           message: "",
           occurred: false,
         });
-        navigate("/login/dashboard")
+        navigate("/login/dashboard");
       }, timer);
     } catch (error) {
       setError({
