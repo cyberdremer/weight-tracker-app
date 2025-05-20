@@ -8,6 +8,11 @@ const objectToForm = (form) => {
   return formData;
 };
 
+const objectToFormToUrlQuery = (form) => {
+  const urlQuery = new URLSearchParams(objectToForm(form)).toString();
+  return urlQuery;
+};
+
 const postRequest = async (endpoint, body) => {
   const bodyData = objectToForm(body);
   const query = new URLSearchParams(bodyData).toString();
@@ -86,6 +91,19 @@ const protectedPostRequestDownload = async (endpoint, body) => {
   return file;
 };
 
+const logoutRequest = async () => {
+  const response = await fetch(`${backendUrl + "/logout"}`, {
+    method: "post",
+    credentials: "include",
+    mode: "cors",
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error.message || response.statusText);
+  }
+  return data;
+};
+
 const protectedGetRequest = async (endpoint) => {
   const response = await fetch(`${backendUrl + endpoint}`, {
     method: "get",
@@ -98,6 +116,22 @@ const protectedGetRequest = async (endpoint) => {
   }
   return data;
 };
+
+// const protectedGetRequestForm = async (endpoint, body) => {
+//   const query = objectToFormToUrlQuery(body);
+//   const response = await fetch(`${backendUrl + endpoint}`, {
+//     method: "get",
+//     credentials: "include",
+//     mode: "cors",
+//     body: query,
+//   });
+
+//   const data = await response.json();
+//   if (!response.ok) {
+//     throw new Error(data.error.message || response.statusText);
+//   }
+//   return data;
+// };
 
 const protectedGetRequestDownload = async (endpoint) => {
   const response = await fetch(`${backendUrl + endpoint}`, {
@@ -162,4 +196,6 @@ export {
   protectedPostRequestJSON,
   protectedGetRequestDownload,
   protectedPostRequestDownload,
+  protectedGetRequestForm,
+  logoutRequest
 };
