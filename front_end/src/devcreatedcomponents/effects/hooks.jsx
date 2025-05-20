@@ -14,8 +14,14 @@ const useFetchData = (endpoint) => {
         if (response.error) {
           throw new Error(response.error.message);
         }
+        const dataForGraph = response.data.entries.map((entry) => ({
+          weight: entry.weight,
+          date: new Date(entry.createdat).toLocaleDateString(),
+          notes: entry.notes,
+          id: entry.id,
+        }));
 
-        setEntries(response.data.entries);
+        setEntries(dataForGraph);
         setLoading(false);
       } catch (err) {
         setError(true);
