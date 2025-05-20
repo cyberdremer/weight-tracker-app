@@ -1,20 +1,23 @@
-
 import { VStack, Box, Flex, Heading } from "@chakra-ui/react";
 import WeightEntryCard from "./weightentrycard";
-const ViewEntries = ({ entries }) => {
+import { convertMetricKilosToImperialPounds } from "@/utils/unitconversions";
+const ViewEntries = ({ entries, isImperial }) => {
+  const sortedEntries = [...entries].sort((a, b) => new Date(b.date) - new Date(a.date));
+
   return (
     <>
       <Flex width="100%" flexDirection="column" alignItems="center">
         <Heading textAlign="center">Weight Entries</Heading>
         <Box overflowY="auto" maxHeight="30rem" boxShadow="md" width="100%">
           <VStack width="100%" gap="4">
-            {entries.map((entry) => {
+            {sortedEntries.map((entry) => {
               return (
                 <WeightEntryCard
                   notes={entry.notes}
-                  weight={entry.weight}
+                  weight={isImperial === true ? convertMetricKilosToImperialPounds(entry.weight) : entry.weight}
                   date={entry.date}
                   key={entry.id}
+                  isImperial={isImperial}
                 ></WeightEntryCard>
               );
             })}
@@ -24,6 +27,5 @@ const ViewEntries = ({ entries }) => {
     </>
   );
 };
-
 
 export default ViewEntries;
