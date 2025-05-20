@@ -15,38 +15,38 @@ import { ErrorAlert, SuccessAlert } from "../alerts/alert";
 import EmptyContainer from "../fragments/emptycontainer";
 import timer from "@/utils/timer";
 
-const mockItems = [
-  {
-    id: 1,
-    weight: 70,
-    date: "2023-10-01",
-    notes: "Feeling good",
-  },
-  {
-    id: 2,
-    weight: 72,
-    date: "2023-10-02",
-    notes: "A bit tired",
-  },
-  {
-    id: 3,
-    weight: 71,
-    date: "2023-10-03",
-    notes: "Had a good workout",
-  },
-  {
-    id: 4,
-    weight: 69,
-    date: "2023-10-04",
-    notes: "Feeling great",
-  },
-  {
-    id: 5,
-    weight: 68,
-    date: "2023-10-05",
-    notes: "Need to eat more protein",
-  },
-];
+// const mockItems = [
+//   {
+//     id: 1,
+//     weight: 70,
+//     date: "2023-10-01",
+//     notes: "Feeling good",
+//   },
+//   {
+//     id: 2,
+//     weight: 72,
+//     date: "2023-10-02",
+//     notes: "A bit tired",
+//   },
+//   {
+//     id: 3,
+//     weight: 71,
+//     date: "2023-10-03",
+//     notes: "Had a good workout",
+//   },
+//   {
+//     id: 4,
+//     weight: 69,
+//     date: "2023-10-04",
+//     notes: "Feeling great",
+//   },
+//   {
+//     id: 5,
+//     weight: 68,
+//     date: "2023-10-05",
+//     notes: "Need to eat more protein",
+//   },
+// ];
 
 const Dashboard = () => {
   // const { entries, error, loading, setEntries } =
@@ -195,7 +195,7 @@ const Dashboard = () => {
                     isChecked={isImperial}
                     handleCheckedChange={setIsImperial}
                   ></DashboardCharts>
-                  <ViewEntries entries={entries}></ViewEntries>
+                  <ViewEntries entries={entries} isImperial={user.isImperial}></ViewEntries>
                 </>
               );
             } else {
