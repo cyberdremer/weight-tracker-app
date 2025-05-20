@@ -189,7 +189,7 @@ const AccountInformation = ({ name, email, dob }) => {
             <Field.Label>Date of Birth:</Field.Label>
             <Input
               name="dob"
-              value={new Date(user.dob).toDateString()}
+              value={new Date(user.dateofbirth).toLocaleDateString()}
               disabled
             ></Input>
           </Field.Root>
