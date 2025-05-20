@@ -10,8 +10,10 @@ const authCheck = [
         user: {
           fullname: req.user.fullname,
           height: req.user.height,
+          email: req.user.email,
           id: req.user.id,
           isImperial: req.user.isImperial,
+          dateofbirth: req.user.dateofbirth,
         },
         auth: req.isAuthenticated(),
       },
