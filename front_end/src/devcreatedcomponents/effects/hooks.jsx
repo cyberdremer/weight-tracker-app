@@ -20,7 +20,6 @@ const useFetchData = (endpoint) => {
           notes: entry.notes,
           id: entry.id,
         }));
-
         setEntries(dataForGraph);
         setLoading(false);
       } catch (err) {
