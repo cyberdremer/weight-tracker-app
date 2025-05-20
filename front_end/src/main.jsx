@@ -13,11 +13,11 @@ import "@fontsource/roboto/700.css";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider>
-      <AuthProvider>
-       
+      <InfoProvider>
+        <AuthProvider>
           <App />
-        
-      </AuthProvider>
+        </AuthProvider>
+      </InfoProvider>
     </Provider>
   </StrictMode>
 );
