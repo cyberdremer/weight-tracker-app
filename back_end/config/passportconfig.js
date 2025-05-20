@@ -17,7 +17,9 @@ passport.deserializeUser(async (id, done) => {
         isImperial: true,
         height: true,
         id: true,
-        fullname: true
+        fullname: true,
+        dateofbirth: true,
+        email: true,
       }
     });
     done(null, user);
