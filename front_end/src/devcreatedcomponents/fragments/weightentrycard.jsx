@@ -1,5 +1,5 @@
-import { Heading, VStack, Text } from "@chakra-ui/react";
-const WeightEntryCard = ({ notes, weight, date, id }) => {
+import { Heading, VStack, Text, FormatNumber } from "@chakra-ui/react";
+const WeightEntryCard = ({ notes, weight, date, id, isImperial }) => {
   return (
     <>
       <VStack
@@ -13,10 +13,15 @@ const WeightEntryCard = ({ notes, weight, date, id }) => {
         width="100%"
         animationName="slide-from-left-full"
         animationDuration="slowest"
-        
       >
         <Heading textAlign="center">Date: {date}</Heading>
-        <Text >Weight: {weight}</Text>
+        <Text>
+          <FormatNumber
+            value={weight}
+            style="unit"
+            unit={isImperial ? "pound" : "kilogram"}
+          ></FormatNumber>
+        </Text>
         <Text>Notes: {notes}</Text>
       </VStack>
     </>
