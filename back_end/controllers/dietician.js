@@ -8,7 +8,7 @@ const ErrorWithStatusCode = require("../errors/statuscode");
 const userDietPrompt = require("../prompts/prompt");
 const { v4: uuidv4 } = require("uuid");
 const { json } = require("express");
-import("@react-pdf/renderer")
+const ReactPDF = require("@react-pdf/renderer");
 const React = require("react");
 const DietDocument = require("../document-templates/documents");
 const fs = require("fs");
