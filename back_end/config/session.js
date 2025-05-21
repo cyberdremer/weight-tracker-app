@@ -10,7 +10,7 @@ const sessionConfig = session({
     secure: process.env.NODE_ENV === "dev" ? false : true,
     sameSite: process.env.NODE_ENV === "dev" ? "lax" : "none",
     httpOnly: process.env.NODE_ENV === "dev" ? false : true,
-    domain: process.env.NODE_ENV === "dev" ? undefined : process.env.DOMAIN,
+    domain: process.env_DOMAIN,
   },
 
   resave: false,
