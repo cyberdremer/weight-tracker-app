@@ -4,7 +4,7 @@ import ViewEntries from "../fragments/viewentries";
 import DashboardHeader from "../fragments/dashboard/dashboardheader";
 import { useFetchData } from "../effects/hooks";
 import DashboardCharts from "../fragments/dashboard/dashboardcharts";
-import { protectedGetRequest, protectedGetRequestForm } from "@/utils/requests";
+import { protectedGetRequest } from "@/utils/requests";
 import {
   calculateBMIUsingImperial,
   calulateBMIUsingMetric,
