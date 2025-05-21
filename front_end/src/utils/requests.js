@@ -196,6 +196,5 @@ export {
   protectedPostRequestJSON,
   protectedGetRequestDownload,
   protectedPostRequestDownload,
-  protectedGetRequestForm,
   logoutRequest
 };
