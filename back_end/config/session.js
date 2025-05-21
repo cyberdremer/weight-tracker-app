@@ -8,7 +8,7 @@ const sessionConfig = session({
   cookie: {
     maxAge: 24 * 60 * 60 * 1000,
     secure: process.env.NODE_ENV === "dev" ? false : true,
-    sameSite: process.env.NODE_ENV === "dev" ? "lax" : "none",
+    sameSite: process.env.NODE_ENV === "dev" ? "lax" : "lax",
     httpOnly: process.env.NODE_ENV === "dev" ? false : true,
     domain: process.env_DOMAIN,
   },
