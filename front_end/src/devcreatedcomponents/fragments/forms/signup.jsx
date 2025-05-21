@@ -179,16 +179,16 @@ const SignUpForm = () => {
 
           <Field.Root>
             <Field.Label>Height:</Field.Label>
-            
-              
-                <Input
-                  name="height"
-                  type="number"
-                  value={form.height}
-                  onChange={handleChange}
-                ></Input>
-             
-          
+
+            <InputGroup
+              endElement={selectValue[0] === "lbs" ? "inches" : "centimeters"}
+            >
+              <Input
+                name="height"
+                value={form.height}
+                onChange={handleChange}
+              ></Input>
+            </InputGroup>
           </Field.Root>
 
           <Field.Root required>
