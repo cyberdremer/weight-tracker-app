@@ -15,7 +15,7 @@ import { ErrorAlert, SuccessAlert } from "../alerts/alert";
 import EmptyContainer from "../fragments/emptycontainer";
 import timer from "@/utils/timer";
 
-// const mockItems = [
+
 //   {
 //     id: 1,
 //     weight: 70,
@@ -49,8 +49,7 @@ import timer from "@/utils/timer";
 // ];
 
 const Dashboard = () => {
-  // const { entries, error, loading, setEntries } =
-  //   useFetchData("/weight/retrieve");
+
 
   const { entries, error, loading } = useFetchData("/weight/retrieve");
   const { user } = useContext(InfoContext);

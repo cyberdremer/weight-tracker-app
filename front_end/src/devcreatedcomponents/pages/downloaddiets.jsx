@@ -17,25 +17,7 @@ const prodTimer = import.meta.env.VITE_PROD_ALERT_TIMER;
 const devTimer = import.meta.env.VITE_DEV_ALERT_TIMER;
 const timer = env === "dev" ? devTimer : prodTimer;
 
-// const mockData = [
-//   "poop",
-//   "grass",
-//   "mud",
-//   "horse",
-//   "ban this fool",
-//   "really man",
-//   "poop",
-//   "grass",
-//   "mud",
-//   "horse",
-//   "ban this fool",
-//   "really man",
-// ].map((entry, index) => {
-//   return {
-//     name: entry,
-//     index,
-//   };
-// });
+
 const DownloadDiets = () => {
   const [responseError, setResponseError] = useState({
     error: false,
