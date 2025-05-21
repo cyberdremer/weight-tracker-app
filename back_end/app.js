@@ -17,6 +17,7 @@ app.use(
       process.env.ORIGIN_URL,
     ],
     exposedHeaders: ["set-cookie"],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
 );
