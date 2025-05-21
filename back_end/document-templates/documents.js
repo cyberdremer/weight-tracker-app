@@ -1,6 +1,11 @@
 const React = require("react");
-import("@react-pdf/renderer")
-
+const {
+  Text,
+  Page,
+  View,
+  Document,
+  StyleSheet,
+} = require("@react-pdf/renderer");
 
 const styles = StyleSheet.create({
   page: {
