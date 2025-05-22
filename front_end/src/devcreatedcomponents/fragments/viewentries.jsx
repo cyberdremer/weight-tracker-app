@@ -6,10 +6,10 @@ const ViewEntries = ({ entries, isImperial }) => {
 
   return (
     <>
-      <Flex width="100%" flexDirection="column" alignItems="center">
+      <Flex width="100%" flexDirection="column" alignItems="center" marginTop="4">
         <Heading textAlign="center">Weight Entries</Heading>
-        <Box overflowY="auto" maxHeight="30rem" boxShadow="md" width="100%">
-          <VStack width="100%" gap="4">
+        <Box overflowY="auto" maxHeight="30rem"  width="100%" >
+          <VStack width="100%" gap="4" marginTop="4">
             {sortedEntries.map((entry) => {
               return (
                 <WeightEntryCard
