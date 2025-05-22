@@ -187,6 +187,18 @@ const protectedDeleteRequest = async (endpoint, body) => {
   return data;
 };
 
+const protectedDeleteRequestWithoutForm = async (endpoint) => {
+  const response = await fetch(`${backendUrl + endpoint}`, {
+    method: "delete",
+    credentials: "include",
+    mode: "cors",
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error.message || response.statusText);
+  }
+  return data;
+};
 export {
   protectedGetRequest,
   protectedDeleteRequest,
@@ -196,5 +208,6 @@ export {
   protectedPostRequestJSON,
   protectedGetRequestDownload,
   protectedPostRequestDownload,
-  logoutRequest
+  protectedDeleteRequestWithoutForm,
+  logoutRequest,
 };
