@@ -1,6 +1,7 @@
 import {
   protectedDeleteRequest,
   protectedGetRequest,
+  protectedDeleteRequestWithoutForm,
   protectedGetRequestDownload,
 } from "@/utils/requests";
 import { useFetchData, useFetchDiets } from "../effects/hooks";
@@ -39,7 +40,7 @@ const DownloadDiets = () => {
         `/dietician/generateddiet/${dietId}`
       );
       download(response);
-      if (!response.error) {
+      if (response.error) {
         throw new Error(response.error.message);
       }
       setResponseSuccess({
@@ -70,7 +71,7 @@ const DownloadDiets = () => {
   const handleDelete = async (id) => {
     const dietId = id;
     try {
-      const response = await protectedDeleteRequest(
+      const response = await protectedDeleteRequestWithoutForm(
         `/dietician/generateddiet/${dietId}`
       );
       if (response.error) {
