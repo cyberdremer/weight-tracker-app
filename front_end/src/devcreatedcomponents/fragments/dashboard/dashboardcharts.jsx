@@ -14,6 +14,7 @@ import {
   FormatNumber,
   Text,
 } from "@chakra-ui/react";
+import BMIBlurb from "../aidietician/bmiblurb";
 import { useContext, useState } from "react";
 import { protectedGetRequest } from "@/utils/requests";
 import ViewEntries from "../viewentries";
@@ -64,6 +65,17 @@ const DashboardCharts = ({
   ];
 
   const [isImperial, setIsImperial] = useState(true);
+
+  const bmi =
+    user.isImperial === true
+      ? calculateBMIUsingImperial(
+          Number(user.height) / 2.54,
+          entries[entries.length - 1].weight * 2.20462262
+        )
+      : calulateBMIUsingMetric(
+          Number(user.height) / 100,
+          entries[entries.length - 1].weight
+        );
 
   return (
     <>
@@ -155,30 +167,23 @@ const DashboardCharts = ({
                   : entries[entries.length - 1].weight
               }
               style="unit"
-              unit={user.isImperial === true ? "pound" :"kilogram"}
+              unit={user.isImperial === true ? "pound" : "kilogram"}
             ></FormatNumber>
           </Text>
         </VStack>
-        <VStack marginTop="4">
+        <VStack marginTop="4" gap="10">
           <Heading>BMI for {`${entries[entries.length - 1].date}`}</Heading>
           <Gauge
-            value={
-              user.isImperial === true
-                ? calculateBMIUsingImperial(
-                    Number(user.height) / 2.54,
-                    entries[entries.length - 1].weight * 2.20462262
-                  )
-                : calulateBMIUsingMetric(
-                    Number(user.height) / 100,
-                    entries[entries.length - 1].weight
-                  )
-            }
+            value={bmi}
+            valueMax={40}
             startAngle={-90}
             endAngle={90}
             innerRadius="80%"
             outerRadius="100%"
           />
+          <BMIBlurb bmiValue={bmi}></BMIBlurb>
         </VStack>
+        
       </Flex>
     </>
   );
