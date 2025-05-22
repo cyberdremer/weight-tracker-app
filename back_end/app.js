@@ -8,6 +8,8 @@ const toplevelRouter = require("./routes/toplevel");
 const app = express();
 const sessionLogger = require("./middleware/sessionlogging");
 
+app.set("trust proxy", 1);
+
 app.use(
   cors({
     credentials: true,
