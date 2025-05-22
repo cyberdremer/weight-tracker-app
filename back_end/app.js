@@ -8,12 +8,17 @@ const toplevelRouter = require("./routes/toplevel");
 const app = express();
 const sessionLogger = require("./middleware/sessionlogging");
 
+// Whenever running on
+
 app.set("trust proxy", 1);
 
 app.use(
   cors({
     credentials: true,
-    origin: process.env.ORIGIN_URL,
+    origin:
+      process.env.NODE_ENV === "dev"
+        ? "http://localhost:5173"
+        : process.env.ORIGIN_URL,
     exposedHeaders: ["set-cookie"],
     allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
