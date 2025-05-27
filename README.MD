@@ -11,6 +11,9 @@ A full-stack weight tracking application built with **React**, **Node.js**, **Ex
 - Download and manage diet plans as PDF documents
 - Responsive and modern UI with Chakra UI and MUI
 
+## Live Website
+[Weight.Tracker](https://ai-weight-tracker-frontend-production.up.railway.app/)
+
 ## Tech Stack
 
 - **Frontend:** React, Chakra UI, MUI, Vite
