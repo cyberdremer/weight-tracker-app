@@ -3,6 +3,7 @@ const { validationResult } = require("express-validator");
 const {
   updateAccountValidation,
   deleteAccountValidation,
+  onboardThirdPartyCredentialsValidation,
 } = require("../validators/validators");
 const prisma = require("../config/prismaclient");
 const ErrorWithStatusCode = require("../errors/statuscode");
@@ -74,7 +75,7 @@ const updateAccount = [
     }
 
     const height =
-      req.user.isImperial === true ? req.body.height * 2.5 : req.body.height ;
+      req.user.isImperial === true ? req.body.height * 2.5 : req.body.height;
     await prisma.user.update({
       where: {
         id: req.user.id,
@@ -93,4 +94,42 @@ const updateAccount = [
   }),
 ];
 
-module.exports = { deleteAccount, updateAccount };
+// This is used when a user makes an account through OAUTH such as Google or
+const onboardThirdPartyCredentialsAccount = [
+  ensureAuthenticated,
+  onboardThirdPartyCredentialsValidation,
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      throw new ErrorWithStatusCode(errors.array()[0].msg, 400);
+    }
+
+
+    const { height, dob, units } = req.body;
+    const finalHeight = height === "lbs" ? height * 2.5 : height; 
+    const user = await prisma.user.update({
+      where: {
+        id: req.user.id,
+      },
+      data: {
+        isImperial: units === "lbs" ? true : false,
+        dateofbirth: new Date(dob),
+        height: finalHeight,
+      },
+    });
+
+    res.status(200).json({
+      data: {
+        message: `User account succesfully onboarded!`,
+        status: 200,
+      },
+    });
+  }),
+];
+
+module.exports = {
+  deleteAccount,
+  updateAccount,
+  onboardThirdPartyCredentialsAccount,
+};
