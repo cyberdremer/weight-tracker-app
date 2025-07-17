@@ -156,6 +156,40 @@ const dateFilterValidation = [
 const deleteAccountValidation = [
   body("password").trim().notEmpty().withMessage(`Password: ${emptyError}`),
 ];
+
+const onboardThirdPartyCredentialsValidation = [
+  body("units")
+    .trim()
+    .notEmpty()
+    .withMessage(`Desired Units: ${emptyError}`)
+    .custom((value) => {
+      return value === "kgs" || value === "lbs";
+    })
+    .withMessage(`Desired units: Invalid Selection, please select again!`),
+
+  body("height")
+    .notEmpty()
+    .withMessage(`Height: ${emptyError}`)
+    .isNumeric()
+    .withMessage(`Height: must be a number!`)
+    .custom((value) => {
+      return value > 0;
+    })
+    .withMessage(`Height: must be a positive, non-zero number`),
+  ,
+  body("dob")
+    .isISO8601()
+    .withMessage("Date of Birth: must be a valid date (YYYY-MM-DD)!")
+    .custom((value) => {
+      const today = new Date();
+      const userDob = new Date(value);
+
+      const diff = today.getTime() - userDob.getTime();
+      const years = diff / (1000 * 60 * 60 * 24 * 7 * 52);
+      return years >= 18;
+    })
+    .withMessage(`Date of Birth: User must be 18 or older!`),
+];
 module.exports = {
   signupValidation,
   loginValidation,
@@ -164,4 +198,5 @@ module.exports = {
   dietValidation,
   dateFilterValidation,
   deleteAccountValidation,
+  onboardThirdPartyCredentialsValidation
 };
