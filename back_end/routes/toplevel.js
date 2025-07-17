@@ -6,6 +6,7 @@ const accountRouter = require("./account");
 const logoutRouter = require("./logout");
 const dieticianRouter = require("./dietician");
 const authenticateRouter = require("./authenticate");
+const oauthRouter = require("./google");
 
 const toplevelRouter = Router();
 toplevelRouter.use("/signup", signupRouter);
@@ -15,4 +16,5 @@ toplevelRouter.use("/weight", weightRouter);
 toplevelRouter.use("/logout", logoutRouter);
 toplevelRouter.use("/dietician", dieticianRouter);
 toplevelRouter.use("/authenticate", authenticateRouter);
+toplevelRouter.use("/oauth", oauthRouter);
 module.exports = toplevelRouter;
