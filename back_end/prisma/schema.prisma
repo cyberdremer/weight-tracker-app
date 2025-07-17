@@ -10,19 +10,19 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_PUBLIC_URL")
+  url      = env("DEV_DATABASE_URL")
 }
 
 model User {
   id            Int             @id @default(autoincrement())
   createdat     DateTime        @default(now())
   fullname      String
-  dateofbirth   DateTime        @db.Date
+  dateofbirth   DateTime?       @default(now()) @db.Date
   email         String          @unique
-  passwordhash  String
+  passwordhash  String?
   WeightEntries WeightEntries[]
   DietEntries   DietEntries[]
-  height        Decimal
+  height        Decimal?
   isImperial    Boolean         @default(true)
 }
 
