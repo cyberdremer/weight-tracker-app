@@ -4,7 +4,8 @@ import ViewEntries from "../fragments/viewentries";
 import DashboardHeader from "../fragments/dashboard/dashboardheader";
 import { useFetchData } from "../effects/hooks";
 import DashboardCharts from "../fragments/dashboard/dashboardcharts";
-import { protectedGetRequest } from "@/utils/requests";
+import { protectedGetRequest, protectedPostRequest } from "@/utils/requests";
+import OnboardingForm from "../fragments/forms/onboardingform";
 import {
   calculateBMIUsingImperial,
   calulateBMIUsingMetric,
@@ -14,7 +15,6 @@ import LoadingPlaceholder from "../fragments/loading";
 import { ErrorAlert, SuccessAlert } from "../alerts/alert";
 import EmptyContainer from "../fragments/emptycontainer";
 import timer from "@/utils/timer";
-
 
 //   {
 //     id: 1,
@@ -49,8 +49,6 @@ import timer from "@/utils/timer";
 // ];
 
 const Dashboard = () => {
-
-
   const { entries, error, loading } = useFetchData("/weight/retrieve");
   const { user } = useContext(InfoContext);
 
@@ -73,11 +71,12 @@ const Dashboard = () => {
     message: "",
   });
 
+
   const handleSearchEntries = async (e) => {
     e.preventDefault();
     try {
-      if(form.startdate === "" || form.enddate === ""){
-        throw new Error("Search criteria cannot be empty!")
+      if (form.startdate === "" || form.enddate === "") {
+        throw new Error("Search criteria cannot be empty!");
       }
       const searchStartDate = new Date(form.startdate)
         .toLocaleDateString()
@@ -169,6 +168,12 @@ const Dashboard = () => {
     <>
       <Flex grow="1" direction="column" minH="100vh" gap="10  ">
         <DashboardHeader name={user.fullname}></DashboardHeader>
+        {/* I want to add a form that will allow for a user to edit their birthday, height and their units of measurement! */}
+        {user.height === null && (
+          <OnboardingForm
+            submitFunction={() => handleAccountOnboarding}
+          ></OnboardingForm>
+        )}
         {loading && <LoadingPlaceholder></LoadingPlaceholder>}
         {error && (
           <ErrorAlert message="Error please reload the page!"></ErrorAlert>
@@ -194,7 +199,10 @@ const Dashboard = () => {
                     isChecked={isImperial}
                     handleCheckedChange={setIsImperial}
                   ></DashboardCharts>
-                  <ViewEntries entries={entries} isImperial={user.isImperial}></ViewEntries>
+                  <ViewEntries
+                    entries={entries}
+                    isImperial={user.isImperial}
+                  ></ViewEntries>
                 </>
               );
             } else {
