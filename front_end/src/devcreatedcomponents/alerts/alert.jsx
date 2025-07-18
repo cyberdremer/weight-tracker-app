@@ -6,11 +6,17 @@ import {
   Input,
   Alert,
   Text,
-  Stack
+  Stack,
 } from "@chakra-ui/react";
 import GenericModal from "../modal/genericmodal";
 
-const DeleteAccountAlert = ({ open, handleDelete, handleClose, value, onChange }) => {
+const DeleteAccountAlert = ({
+  open,
+  handleDelete,
+  handleClose,
+  value,
+  onChange,
+}) => {
   return (
     <GenericModal
       open={open}
@@ -18,19 +24,31 @@ const DeleteAccountAlert = ({ open, handleDelete, handleClose, value, onChange }
       title="Deleting Account"
       handleClose={handleClose}
       handleDelete={handleDelete}
+      footer={
+        <>
+          <Dialog.ActionTrigger asChild>
+            <Button variant="outline" onClick={handleClose}>
+              <Text>Cancel</Text>
+            </Button>
+          </Dialog.ActionTrigger>
+          <Button colorPalette="red" onClick={handleDelete}>
+            <Text>Delete</Text>
+          </Button>
+        </>
+      }
     >
       <Stack gap="5">
-          <Text >
-            Are you sure you would like to delete your account? Enter your password
-            below to confirm account deletion
-          </Text>
-          <Input
-            type="password"
-            name="password"
-            placeholder="Enter your password"
-            value={value}
-            onChange={onChange}
-          ></Input>
+        <Text>
+          Are you sure you would like to delete your account? Enter your
+          password below to confirm account deletion
+        </Text>
+        <Input
+          type="password"
+          name="password"
+          placeholder="Enter your password"
+          value={value}
+          onChange={onChange}
+        ></Input>
       </Stack>
     </GenericModal>
   );
