@@ -6,5 +6,4 @@ const passwordHasher = (password) => {
   return bcrypt.hash(password, saltLength);
 };
 
-
 module.exports = passwordHasher;
