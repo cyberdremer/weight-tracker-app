@@ -5,6 +5,8 @@ import { postRequest } from "@/utils/requests";
 import { AuthContext } from "@/devcreatedcomponents/context/AuthContext";
 import { InfoContext } from "@/devcreatedcomponents/context/InfoContext";
 import { useNavigate } from "react-router";
+import { FaGoogle } from "react-icons/fa";
+import backendUrl from "@/utils/backendurl";
 const env = import.meta.env.VITE_ENV;
 const prodTimer = import.meta.env.VITE_PROD_ALERT_TIMER;
 const devTimer = import.meta.env.VITE_DEV_ALERT_TIMER;
@@ -30,6 +32,11 @@ const LogInForm = () => {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleGoogleLogin = async (e) => {
+    e.preventDefault();
+    window.open(`${backendUrl}/oauth/google`, "_self", "noopener,noreferrer");
   };
 
   const handleLogin = async (e) => {
@@ -116,6 +123,9 @@ const LogInForm = () => {
         </Fieldset.Content>
         <Button type="submit" minWidth="100%" onClick={handleLogin}>
           Log in
+        </Button>
+        <Button type="submit" minWidth="100%" onClick={handleGoogleLogin}>
+          Log in with <FaGoogle></FaGoogle>
         </Button>
       </Fieldset.Root>
     </>
