@@ -1,12 +1,20 @@
-import { Box, CloseButton, Dialog, Portal, Button, Text, HStack } from "@chakra-ui/react";
+import {
+  Box,
+  CloseButton,
+  Dialog,
+  Portal,
+  Button,
+  Text,
+  HStack,
+} from "@chakra-ui/react";
 
 const GenericModal = ({
   open,
   children,
   title,
-  handleClose,
   role,
-  handleDelete,
+  footer,
+  handleClose,
 }) => {
   return (
     <>
@@ -20,16 +28,7 @@ const GenericModal = ({
               </Dialog.Header>
               <Dialog.Body>{children}</Dialog.Body>
               <Dialog.Footer>
-                
-                    <Dialog.ActionTrigger asChild>
-                      <Button variant="outline" onClick={handleClose} >
-                        <Text>Cancel</Text>
-                      </Button>
-                    </Dialog.ActionTrigger>
-                    <Button colorPalette="red" onClick={handleDelete}>
-                      <Text>Delete</Text>
-                    </Button>
-                
+                {footer}
               </Dialog.Footer>
               <Dialog.CloseTrigger asChild>
                 <CloseButton onClick={handleClose} size="sm"></CloseButton>
@@ -41,5 +40,7 @@ const GenericModal = ({
     </>
   );
 };
+
+
 
 export default GenericModal;
