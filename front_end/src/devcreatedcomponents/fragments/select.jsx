@@ -33,7 +33,7 @@ const SelectFragment = ({
             <Select.Indicator></Select.Indicator>
           </Select.IndicatorGroup>
         </Select.Control>
-        <Portal>
+        <Portal disabled>
           <Select.Positioner>
             <Select.Content>
               {selectItems.items.map((items, index) => (
